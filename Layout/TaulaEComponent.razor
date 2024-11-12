@@ -1,0 +1,8 @@
+﻿@using BackEleccionsM.Dto
+<h6>@Taula.NomTaula</h6>
+<p>Numero de cens taula: @Taula.CensTaula</p>
+
+@code {
+	[Parameter]
+	public TaulaElectoralDto Taula { get; set; }
+}

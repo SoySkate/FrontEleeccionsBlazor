@@ -1,0 +1,83 @@
+is_global = true
+build_property.EnableAotAnalyzer = 
+build_property.EnableSingleFileAnalyzer = 
+build_property.EnableTrimAnalyzer = false
+build_property.IncludeAllContentForSelfExtract = 
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = false
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = browser
+build_property.RootNamespace = FrontEleccM
+build_property.RootNamespace = FrontEleccM
+build_property.ProjectDir = C:\Users\Andrew\source\repos\FrontEleccM\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = false
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\Andrew\source\repos\FrontEleccM
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/Andrew/source/repos/FrontEleccM/App.razor]
+build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andrew/source/repos/FrontEleccM/Layout/CandidatComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XENhbmRpZGF0Q29tcG9uZW50LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andrew/source/repos/FrontEleccM/Layout/CardComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XENhcmRDb21wb25lbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andrew/source/repos/FrontEleccM/Layout/MuniComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE11bmlDb21wb25lbnQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andrew/source/repos/FrontEleccM/Layout/PartitComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XFBhcnRpdENvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andrew/source/repos/FrontEleccM/Layout/TaulaEComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XFRhdWxhRUNvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andrew/source/repos/FrontEleccM/Pages/Configuration.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29uZmlndXJhdGlvbi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andrew/source/repos/FrontEleccM/Pages/Counter.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ291bnRlci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andrew/source/repos/FrontEleccM/Pages/DayEleccions.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGF5RWxlY2Npb25zLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andrew/source/repos/FrontEleccM/Pages/Home.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andrew/source/repos/FrontEleccM/Pages/Results.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVzdWx0cy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andrew/source/repos/FrontEleccM/Pages/Weather.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcV2VhdGhlci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andrew/source/repos/FrontEleccM/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andrew/source/repos/FrontEleccM/Layout/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE1haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-s9wjhfvlgn
+
+[C:/Users/Andrew/source/repos/FrontEleccM/Layout/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE5hdk1lbnUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-nkxtj0thzk

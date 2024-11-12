@@ -1,0 +1,87 @@
+﻿@page "/config"
+@using BackEleccionsM.Dto
+
+@inject HttpClient Http
+
+<h3>Configuració</h3>
+<div class="divflexed">
+    <div>
+        <CardComponent Municipi="SelectedMuni" Municipis="Municipis"/>
+        <!--<ul>
+            foreach (var muni in Municipis)
+            {
+                <li><MuniComponent Municipi="muni"/></li>
+            }
+        </ul>-->
+    </div>
+     
+    <!-- to create muni visible/not-->
+    <div>
+        <h5>Create New Municipi? -></h5>
+        <button @onclick="visibleMuniC">CrearMuni</button>
+        
+        <!-- Cambia la clase en función del estado de isMuniVisible -->
+        <div class="@(!isMuniVisible ? "show" : "visually-hidden")">
+            <input type="text" id="muni" @bind-value="Muni.NomMunicipi" placeholder="Introdueix el Municipi" />
+            <p>NUM regidors:</p>
+            <input type="number" id="regid" @bind-value="Muni.NumeroRegidors" placeholder="Introdueix el número de regidors" />
+            <button class="botonCreate" @onclick="() => createMunicipi(Muni)">Crear Municipi</button>
+        </div>
+    </div>
+</div>
+
+
+
+@code {
+    public MunicipiDto Muni { get; set; } = new MunicipiDto();
+    private MunicipiDto SelectedMuni { get; set; } = new MunicipiDto();
+    private List<MunicipiDto> Municipis { get; set; } = new List<MunicipiDto>();
+    
+    private string? CandidatName { get; set; }
+
+    // Variable para controlar la visibilidad
+    private bool isMuniVisible { get; set; } = true;
+
+    async Task createMunicipi(MunicipiDto Muni)
+    {
+        var muni = new { nomMunicipi = Muni.NomMunicipi, numeroRegidors = Muni.NumeroRegidors };
+
+        var response = await Http.PostAsJsonAsync("api/Municipi", muni);
+
+        if (response.IsSuccessStatusCode)
+        {
+            Console.WriteLine("Municipio creado correctamente");
+        }
+        else
+        {
+            Console.WriteLine("Error al crear el municipio");
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetMunis();
+    }
+
+    void visibleMuniC()
+    {
+        isMuniVisible = !isMuniVisible; // Alterna la visibilidad
+    }
+
+    async Task GetMunis()
+    {
+        try
+        {
+            // Llamada a la API para obtener la lista de municipios
+            var munis = await Http.GetFromJsonAsync<List<MunicipiDto>>("api/Municipi");
+            if (munis != null)
+            {
+                Municipis = munis;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al obtener municipios: {ex.Message}");
+        }
+    }
+}

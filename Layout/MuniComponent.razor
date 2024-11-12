@@ -1,0 +1,11 @@
+﻿@using BackEleccionsM.Dto
+
+<h3>@Municipi.NomMunicipi</h3>
+<p>Numero de Regisdors: @Municipi.NumeroRegidors</p>
+
+
+@code {
+	[Parameter]
+	public MunicipiDto Municipi { get; set; }
+
+}

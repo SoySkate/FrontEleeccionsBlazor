@@ -1,0 +1,145 @@
+﻿@using BackEleccionsM.Dto
+@inject HttpClient Http
+
+<div>
+	<h3>MIS MUNIS CARD from cardComponent</h3>
+	<div>
+		<ul>
+			@foreach (var muni in Municipis)
+			{
+				<li @onclick="() => SelectMunicipi(muni)"><MuniComponent Municipi="muni" /></li>
+			}
+		</ul>
+		@if(SelectedMuni!=null)
+		{
+			<div>
+				<h5>Detalls del Municipi Seleccionat</h5>
+				<p><strong>Nom:</strong> @SelectedMuni.NomMunicipi</p>
+				<p><strong>Número de regidors:</strong> @SelectedMuni.NumeroRegidors</p>
+				<!-- Aquí puedes agregar más detalles si los tienes disponibles -->
+			</div>
+			<div>
+				<h5>Partits Polítics</h5>
+			
+				<ul>
+					@foreach (var partit in Partits)
+					{
+						<li @onclick="() => selectPartit(partit)"><PartitComponent Partit="partit" /></li>
+					}
+				</ul>
+				@if (SelectedPartit != null)
+				{
+					<ol>
+						@foreach (var candidat in Candidats)
+						{
+							<li @onclick="() => selectCandidat(candidat)"><CandidatComponent Candidat="candidat" /></li>
+						}
+					</ol>
+				}
+				<!--<button class="btn-primary" onclick="() => createPartit(Partit, SelectedMuni.ID)">Crear Partit</button>-->
+			</div>
+			<div>
+				<h5>Taules Electorals</h5>
+				<ul>
+					@foreach(var taula in Taules)
+					{
+						<li @onclick="()=> selectedTaula(taula)"><TaulaEComponent Taula="taula" /></li>
+					}
+					
+				</ul>
+			</div>
+		}
+	</div>
+</div>
+
+
+@code {
+	[Parameter]
+	public MunicipiDto Municipi { get; set; } 
+
+	[Parameter]
+	public List<MunicipiDto> Municipis { get; set; }
+
+	[Parameter]
+	public MunicipiDto SelectedMuni { get; set; }
+	//partitsP
+	private PartitPoliticDto Partit { get; set; } = new PartitPoliticDto();
+	private PartitPoliticDto SelectedPartit { get; set; } = new PartitPoliticDto();
+	public List<PartitPoliticDto> Partits { get; set; } = new List<PartitPoliticDto>();
+
+	//Candidats
+	private CandidatDto Candidat { get; set; } = new CandidatDto();
+	private CandidatDto SelectedCandidat { get; set; } = new CandidatDto();
+	private List<CandidatDto> Candidats { get; set; } = new List<CandidatDto>();
+
+	//taulesElectorasl
+	private TaulaElectoralDto Taula { get; set; } = new TaulaElectoralDto();
+	private TaulaElectoralDto SelectedTaula { get; set; } = new TaulaElectoralDto();
+	private List<TaulaElectoralDto> Taules { get; set; } = new List<TaulaElectoralDto>();
+
+
+	// Método para manejar la selección de un municipio
+	async Task SelectMunicipi(MunicipiDto municipi)
+	{
+		SelectedMuni = municipi;
+		Console.WriteLine("Selecting muni");
+		await getPartits(SelectedMuni);
+		await getTaules(SelectedMuni);
+	}
+	async Task selectPartit(PartitPoliticDto partit)
+	{
+		SelectedPartit = partit;
+		Console.WriteLine("Partido selected: "+SelectedPartit);
+		await getCandidats(SelectedPartit);
+	}
+	void selectCandidat(CandidatDto candidat)
+	{
+		SelectedCandidat = candidat;
+	}
+	void selectedTaula(TaulaElectoralDto taula)
+	{
+		SelectedTaula = taula;
+	}
+	async Task getCandidats(PartitPoliticDto partit)
+	{
+		Console.WriteLine("Going to fetch Candidats...");
+		var candidats = await Http.GetFromJsonAsync<List<CandidatDto>>($"api/Candidat/partit/{partit.ID}");
+		Console.WriteLine("impresion de Candidats:");
+		Console.WriteLine(candidats);
+		Candidats = candidats;
+		Console.WriteLine(Candidats.Count());
+	}
+	async Task getPartits(MunicipiDto Idmuni)
+	{
+		Console.WriteLine("Going to fetch partits...");
+		var partits = await Http.GetFromJsonAsync<List<PartitPoliticDto>>($"api/PartitPolitic/muniID/{Idmuni.ID}");
+		Console.WriteLine("impresion de partiss:");
+		Console.WriteLine(partits);
+		Partits = partits;
+		Console.WriteLine(Partits.Count());
+	}
+	async Task getTaules(MunicipiDto Idmuni)
+	{
+		Console.WriteLine("Going to fetch taules...");
+		var taules = await Http.GetFromJsonAsync<List<TaulaElectoralDto>>($"api/TaulaElectoral/muniID/{Idmuni.ID}");
+		Console.WriteLine("impresion de taulesE:");
+		Console.WriteLine(taules);
+		Taules = taules;
+		Console.WriteLine(Partits.Count());
+	}
+	async Task createPartit(PartitPoliticDto Partit, int IdMuni)
+	{
+		//o bien pongo dynamic que e smenos seguro ya que al compilar no mira si es el dato correcto
+		//o bien creo un dto conla class Municipi con lo necesario
+		var muni = await Http.GetFromJsonAsync<MunicipiDto>($"api/Municipi/{IdMuni}");
+		Console.WriteLine(muni);
+		var partit = new { nomPartit = Partit.NomPartit, idmuni = IdMuni };
+		var response = await Http.PostAsJsonAsync("api/PartitPolitic", partit);
+		if (response.IsSuccessStatusCode)
+		{
+			Console.WriteLine("PartidoP creado correctamente");
+		}
+		else { Console.WriteLine("Error al crear el PartidoP"); }
+	}
+}
+
