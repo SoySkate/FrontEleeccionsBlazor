@@ -6,6 +6,5 @@
         public string NomMunicipi { get; set; }
         public int NumeroRegidors { get; set; }
 
-
     }
 }

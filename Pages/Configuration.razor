@@ -6,7 +6,15 @@
 <h3>Configuració</h3>
 <div class="divflexed">
     <div>
-        <CardComponent Municipi="SelectedMuni" Municipis="Municipis"/>
+        <!--1-Omitting ""el simbolo arroba" for variables and properties keeps the code clean and concise.
+            2-Using "el simbolo arroba" for methods ensures proper delegate binding and avoids ambiguity.
+        -->
+        <CardComponent Municipi="SelectedMuni" Municipis="Municipis" OnMunicipiSelected="@HandleMunicipiSelected" /> <!--OnMunicipiSelected="HandleMunicipiSelected"-->
+        @if (SelectedMuni != null)
+        {
+             <buton class="btn-primary" @onclick="()=>deleteMuni(SelectedMuni)">Delete Selected Municipi</buton>
+        }
+       
         <!--<ul>
             foreach (var muni in Municipis)
             {
@@ -14,8 +22,20 @@
             }
         </ul>-->
     </div>
-     
+	<!--update-->
+    <div>
+        <button @onclick="visibleMuniU">UpdateMuni</button>
+
+        <!-- Cambia la clase en función del estado de isMuniVisible -->
+        <div class="@(!isMuniUpdateVisible ? "show" : "visually-hidden")">
+            <input type="text" id="muni" @bind-value="SelectedMuni.NomMunicipi" placeholder="Nom del Municipi" />
+            <p>Regidors:</p>
+            <input type="number" id="regid" @bind-value="SelectedMuni.NumeroRegidors" placeholder="Número de regidors" />
+            <button class="botonCreate" @onclick="() => updateMuni(SelectedMuni)">Actualitza</button>
+        </div>
+    </div>
     <!-- to create muni visible/not-->
+    
     <div>
         <h5>Create New Municipi? -></h5>
         <button @onclick="visibleMuniC">CrearMuni</button>
@@ -36,25 +56,63 @@
     public MunicipiDto Muni { get; set; } = new MunicipiDto();
     private MunicipiDto SelectedMuni { get; set; } = new MunicipiDto();
     private List<MunicipiDto> Municipis { get; set; } = new List<MunicipiDto>();
-    
-    private string? CandidatName { get; set; }
 
+
+    void HandleMunicipiSelected(MunicipiDto municipi)
+    {
+        SelectedMuni = municipi;
+        Console.WriteLine($"Municipio seleccionado en el padre: {SelectedMuni.NomMunicipi} + id: {SelectedMuni.ID}");
+    }
     // Variable para controlar la visibilidad
     private bool isMuniVisible { get; set; } = true;
+    private bool isMuniUpdateVisible { get; set; } = true;
 
     async Task createMunicipi(MunicipiDto Muni)
     {
-        var muni = new { nomMunicipi = Muni.NomMunicipi, numeroRegidors = Muni.NumeroRegidors };
+        // var muni = new { nomMunicipi = Muni.NomMunicipi, numeroRegidors = Muni.NumeroRegidors };
 
-        var response = await Http.PostAsJsonAsync("api/Municipi", muni);
+        var response = await Http.PostAsJsonAsync("api/Municipi", Muni);
 
         if (response.IsSuccessStatusCode)
         {
             Console.WriteLine("Municipio creado correctamente");
+            await GetMunis();
         }
         else
         {
             Console.WriteLine("Error al crear el municipio");
+        }
+    }
+    async Task updateMuni(MunicipiDto Muni)
+    {
+
+
+        var response = await Http.PutAsJsonAsync($"api/Municipi/{Muni.ID}", Muni);
+
+        if (response.IsSuccessStatusCode)
+        {
+            Console.WriteLine("Municipio Actualizado correctamente");
+            await GetMunis();
+        }
+        else
+        {
+            Console.WriteLine("Error al actualizar el municipio");
+        }
+    }
+    async Task deleteMuni(MunicipiDto Muni)
+    {
+        Console.WriteLine("Calling delete funcion.....");
+        Console.WriteLine(SelectedMuni);
+        var response = await Http.DeleteAsync($"api/Municipi/{Muni.ID}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            Console.WriteLine("Municipio eliminado correctamente");
+            await GetMunis();
+        }
+        else
+        {
+            Console.WriteLine("Error al eliminado el municipio");
         }
     }
 
@@ -67,15 +125,22 @@
     {
         isMuniVisible = !isMuniVisible; // Alterna la visibilidad
     }
+    void visibleMuniU()
+    {
+        isMuniUpdateVisible = !isMuniUpdateVisible; // Alterna la visibilidad
+    }
 
     async Task GetMunis()
     {
         try
         {
-            // Llamada a la API para obtener la lista de municipios
             var munis = await Http.GetFromJsonAsync<List<MunicipiDto>>("api/Municipi");
             if (munis != null)
             {
+                foreach (var muni in munis)
+                {
+                    Console.WriteLine($"Municipi recibido: ID={muni.ID}, Nombre={muni.NomMunicipi}, Regidors={muni.NumeroRegidors}");
+                }
                 Municipis = munis;
             }
         }

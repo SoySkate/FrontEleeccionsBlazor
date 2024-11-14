@@ -13,14 +13,13 @@
 		@if(SelectedMuni!=null)
 		{
 			<div>
-				<h5>Detalls del Municipi Seleccionat</h5>
+				<h5>Selected Municipi:</h5>
 				<p><strong>Nom:</strong> @SelectedMuni.NomMunicipi</p>
 				<p><strong>Número de regidors:</strong> @SelectedMuni.NumeroRegidors</p>
 				<!-- Aquí puedes agregar más detalles si los tienes disponibles -->
 			</div>
 			<div>
 				<h5>Partits Polítics</h5>
-			
 				<ul>
 					@foreach (var partit in Partits)
 					{
@@ -29,13 +28,39 @@
 				</ul>
 				@if (SelectedPartit != null)
 				{
+					<buton class="btn-primary" @onclick="()=>deletePartit(SelectedPartit)">Delete Selected Partit</buton>
 					<ol>
 						@foreach (var candidat in Candidats)
 						{
 							<li @onclick="() => selectCandidat(candidat)"><CandidatComponent Candidat="candidat" /></li>
 						}
 					</ol>
-				}
+					@if(SelectedCandidat !=null){
+					<button @onclick="visibleCandidatU">UpdateCandidat</button>
+					<div class="@(!isVisibleCandidatU ? "show" : "visually-hidden")">
+						<input type="text" name="name" @bind-value="SelectedCandidat.NomCandidat" placeholder="Nom Candidat" />
+						<button class="botonCreate" @onclick="() => updateCandidat(SelectedCandidat)">Actualitzar Candidat</button>
+					</div>
+
+					<button @onclick="visibleCandidatC">CrearCandidat</button>
+					<div class="@(!isVisibleCandidatC ? "show" : "visually-hidden")">
+						<input type="text" name="name" @bind-value="Candidat.NomCandidat" placeholder="Crear Nom Candidat" />
+						<button class="botonCreate" @onclick="() => createCandidat(Candidat, SelectedPartit.ID)">Crear Candidat</button>
+					</div>
+					<buton class="btn-primary" @onclick="()=>deleteCandidat(SelectedCandidat)">Delete Selected Candidat</buton>
+					}
+				}	
+				<button @onclick="visiblePartitU">UpdatePartit</button>
+				<div class="@(!isVisiblePartitU ? "show" : "visually-hidden")">
+					<input type="text" name="name" @bind-value="SelectedPartit.NomPartit" placeholder="Nom Partit" />
+					<button class="botonCreate" @onclick="() => updatePartit(SelectedPartit)">Actualitzar Partit</button>
+				</div>
+				
+				<button @onclick="visiblePartitC">CrearPartit</button>
+				<div class="@(!isVisiblePartitC ? "show" : "visually-hidden")">
+					<input type="text" name="name" @bind-value="Partit.NomPartit" placeholder="Crear Nom Partit"/>
+					<button class="botonCreate" @onclick="() => createPartit(Partit, SelectedMuni.ID)">Crear Partit</button>
+				</div>
 				<!--<button class="btn-primary" onclick="() => createPartit(Partit, SelectedMuni.ID)">Crear Partit</button>-->
 			</div>
 			<div>
@@ -45,8 +70,22 @@
 					{
 						<li @onclick="()=> selectedTaula(taula)"><TaulaEComponent Taula="taula" /></li>
 					}
+					<buton class="btn-primary" @onclick="()=>deleteTaula(SelectedTaula)">Delete Selected Taula</buton>
 					
 				</ul>
+				<button @onclick="visibleTaulaU">UpdateTaula</button>
+				<div class="@(!isVisibleTaulaU ? "show" : "visually-hidden")">
+					<input type="text" name="name" @bind-value="SelectedTaula.NomTaula" placeholder="Nom Taula" />
+					<input type="number" name="name" @bind-value="SelectedTaula.CensTaula" placeholder="Cens Taula" />
+					<button class="botonCreate" @onclick="() => updateTaula(SelectedTaula)">Actualitzar Taula</button>
+				</div>
+
+				<button @onclick="visibleTaulaC">CrearTaula</button>
+				<div class="@(!isVisibleTaulaC ? "show" : "visually-hidden")">
+					<input type="text" name="name" @bind-value="Taula.NomTaula" placeholder="Crear Nom Taula" />
+					<input type="number" name="name" @bind-value="Taula.CensTaula" placeholder="Crear Cens Taula" />
+					<button class="botonCreate" @onclick="() => createTaula(Taula, SelectedMuni.ID)">Crear Taula</button>
+				</div>
 			</div>
 		}
 	</div>
@@ -62,6 +101,8 @@
 
 	[Parameter]
 	public MunicipiDto SelectedMuni { get; set; }
+	[Parameter]
+	public EventCallback<MunicipiDto> OnMunicipiSelected { get; set; }
 	//partitsP
 	private PartitPoliticDto Partit { get; set; } = new PartitPoliticDto();
 	private PartitPoliticDto SelectedPartit { get; set; } = new PartitPoliticDto();
@@ -77,12 +118,27 @@
 	private TaulaElectoralDto SelectedTaula { get; set; } = new TaulaElectoralDto();
 	private List<TaulaElectoralDto> Taules { get; set; } = new List<TaulaElectoralDto>();
 
+	//bool visible buttons
+	private bool isVisiblePartitC { get; set; } = true;
+	private bool isVisiblePartitU { get; set; } = true;
+
+	//taules bool
+	private bool isVisibleTaulaC { get; set; } = true;
+	private bool isVisibleTaulaU { get; set; } = true;
+
+	//candidat bool
+	private bool isVisibleCandidatC { get; set; } = true;
+	private bool isVisibleCandidatU { get; set; } = true;
+
 
 	// Método para manejar la selección de un municipio
 	async Task SelectMunicipi(MunicipiDto municipi)
 	{
 		SelectedMuni = municipi;
-		Console.WriteLine("Selecting muni");
+		Console.WriteLine("Selecting ID muni: "+ SelectedMuni.ID);
+		//Invoke lo que hace es "invocar" la funcion de HandleMunicipiSelected()
+		//desde el componente hijo: <ComponenteHijo OnMunicipiSelected="@HandleMunicipiSelected/>
+		await OnMunicipiSelected.InvokeAsync(SelectedMuni); //le envia la info al padre
 		await getPartits(SelectedMuni);
 		await getTaules(SelectedMuni);
 	}
@@ -100,46 +156,153 @@
 	{
 		SelectedTaula = taula;
 	}
+	//Funcions per fer els gets taules, partits i candidats
 	async Task getCandidats(PartitPoliticDto partit)
 	{
-		Console.WriteLine("Going to fetch Candidats...");
 		var candidats = await Http.GetFromJsonAsync<List<CandidatDto>>($"api/Candidat/partit/{partit.ID}");
-		Console.WriteLine("impresion de Candidats:");
-		Console.WriteLine(candidats);
 		Candidats = candidats;
-		Console.WriteLine(Candidats.Count());
 	}
 	async Task getPartits(MunicipiDto Idmuni)
 	{
-		Console.WriteLine("Going to fetch partits...");
 		var partits = await Http.GetFromJsonAsync<List<PartitPoliticDto>>($"api/PartitPolitic/muniID/{Idmuni.ID}");
-		Console.WriteLine("impresion de partiss:");
-		Console.WriteLine(partits);
 		Partits = partits;
-		Console.WriteLine(Partits.Count());
+
 	}
 	async Task getTaules(MunicipiDto Idmuni)
 	{
-		Console.WriteLine("Going to fetch taules...");
 		var taules = await Http.GetFromJsonAsync<List<TaulaElectoralDto>>($"api/TaulaElectoral/muniID/{Idmuni.ID}");
-		Console.WriteLine("impresion de taulesE:");
-		Console.WriteLine(taules);
 		Taules = taules;
-		Console.WriteLine(Partits.Count());
 	}
+
+	//Funcions per togle buttons
+	void visiblePartitC()
+	{
+		isVisiblePartitC = !isVisiblePartitC;
+	}
+	void visiblePartitU()
+	{
+		isVisiblePartitU = !isVisiblePartitU;
+	}
+	void visibleTaulaC()
+	{
+		isVisibleTaulaC = !isVisibleTaulaC;
+	}
+	void visibleTaulaU()
+	{
+		isVisibleTaulaU = !isVisibleTaulaU;
+	}
+	void visibleCandidatC()
+	{
+		isVisibleCandidatC = !isVisibleCandidatC;
+	}
+	void visibleCandidatU()
+	{
+		isVisibleCandidatU = !isVisibleCandidatU;
+	}
+
+	//CRUD PARTIT
 	async Task createPartit(PartitPoliticDto Partit, int IdMuni)
 	{
-		//o bien pongo dynamic que e smenos seguro ya que al compilar no mira si es el dato correcto
+		//o bien pongo dynamic que es menos seguro ya que al compilar no mira si es el dato correcto
 		//o bien creo un dto conla class Municipi con lo necesario
-		var muni = await Http.GetFromJsonAsync<MunicipiDto>($"api/Municipi/{IdMuni}");
-		Console.WriteLine(muni);
-		var partit = new { nomPartit = Partit.NomPartit, idmuni = IdMuni };
-		var response = await Http.PostAsJsonAsync("api/PartitPolitic", partit);
+		Partit.MunicipiId = IdMuni;
+
+		var response = await Http.PostAsJsonAsync("api/PartitPolitic", Partit);
 		if (response.IsSuccessStatusCode)
 		{
 			Console.WriteLine("PartidoP creado correctamente");
+			await getPartits(SelectedMuni);
 		}
 		else { Console.WriteLine("Error al crear el PartidoP"); }
+
+	}
+	async Task deletePartit(PartitPoliticDto Partit)
+	{
+		var response = await Http.DeleteAsync($"api/PartitPolitic/{Partit.ID}");
+		if (response.IsSuccessStatusCode)
+		{
+			Console.WriteLine("PartidoP eliminado correctamente");
+			await getPartits(SelectedMuni);
+		}
+		else { Console.WriteLine("Error al eliminar el PartidoP"); }
+	}
+	async Task updatePartit(PartitPoliticDto Partit)
+	{
+		var response = await Http.PutAsJsonAsync($"api/PartitPolitic/{Partit.ID}", Partit);
+		if (response.IsSuccessStatusCode)
+		{
+			Console.WriteLine("PartidoP actualizado correctamente");
+			await getPartits(SelectedMuni);
+		}
+		else { Console.WriteLine("Error al actualizar el PartidoP"); }
+	}
+
+	//CRUD TAULA
+	async Task deleteTaula(TaulaElectoralDto taula)
+	{
+		var response = await Http.DeleteAsync($"api/TaulaElectoral/{taula.ID}");
+		if (response.IsSuccessStatusCode)
+		{
+			Console.WriteLine("TaulaElectoral eliminada correctamente");
+			await getTaules(SelectedMuni);
+		}
+		else { Console.WriteLine("Error al eliminar la TaulaElectoral"); }
+	}
+	async Task updateTaula(TaulaElectoralDto taula)
+	{
+		var response = await Http.PutAsJsonAsync($"api/TaulaElectoral/{taula.ID}", taula);
+		if (response.IsSuccessStatusCode)
+		{
+			Console.WriteLine("TaulaElectoral actualizada correctamente");
+			await getTaules(SelectedMuni);
+		}
+		else { Console.WriteLine("Error al actualizar la TaulaElectoral"); }
+	}
+	async Task createTaula(TaulaElectoralDto taula, int IdMuni)
+	{
+		taula.MunicipiId = IdMuni;
+
+		var response = await Http.PostAsJsonAsync("api/TaulaElectoral", taula);
+		if (response.IsSuccessStatusCode)
+		{
+			Console.WriteLine("TaulaElectoral creada correctamente");
+			await getTaules(SelectedMuni);
+		}
+		else { Console.WriteLine("Error al crear la TaulaElectoral"); }
+	}
+
+	//CRUD CANDIDAT
+	async Task createCandidat(CandidatDto candidat, int IdPartit)
+	{
+		candidat.PartitPoliticId = IdPartit;
+
+		var response = await Http.PostAsJsonAsync("api/Candidat", candidat);
+		if (response.IsSuccessStatusCode)
+		{
+			Console.WriteLine("Candidat creado correctamente");
+			await getCandidats(SelectedPartit);
+		}
+		else { Console.WriteLine("Error al crear el Candidat"); }
+	}
+	async Task updateCandidat(CandidatDto candidat)
+	{
+		var response = await Http.PutAsJsonAsync($"api/Candidat/{candidat.ID}", candidat);
+		if (response.IsSuccessStatusCode)
+		{
+			Console.WriteLine("Candidat actualizado correctamente");
+			await getCandidats(SelectedPartit);
+		}
+		else { Console.WriteLine("Error al actualizar el Candidat"); }
+	}
+	async Task deleteCandidat(CandidatDto candidat)
+	{
+		var response = await Http.DeleteAsync($"api/Candidat/{candidat.ID}");
+		if (response.IsSuccessStatusCode)
+		{
+			Console.WriteLine("Candidat eliminado correctamente");
+			await getCandidats(SelectedPartit);
+		}
+		else { Console.WriteLine("Error al eliminar el Candidat"); }
 	}
 }
 

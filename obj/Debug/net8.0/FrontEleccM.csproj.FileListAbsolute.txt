@@ -1033,3 +1033,4 @@ C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\FrontEleccM.dll
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\refint\FrontEleccM.dll
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\FrontEleccM.pdb
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\ref\FrontEleccM.dll
+C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\FrontEleccM.sourcelink.json
