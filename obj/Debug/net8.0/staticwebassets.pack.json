@@ -21,6 +21,10 @@
       "PackagePath": "staticwebassets\\service-worker.js"
     },
     {
+      "Id": "C:\\Users\\Andrew\\source\\repos\\FrontEleccM\\wwwroot\\add-resultats.svg",
+      "PackagePath": "staticwebassets\\add-resultats.svg"
+    },
+    {
       "Id": "C:\\Users\\Andrew\\source\\repos\\FrontEleccM\\wwwroot\\appsettings.json",
       "PackagePath": "staticwebassets\\appsettings.json"
     },
@@ -35,6 +39,10 @@
     {
       "Id": "C:\\Users\\Andrew\\source\\repos\\FrontEleccM\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
       "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "C:\\Users\\Andrew\\source\\repos\\FrontEleccM\\wwwroot\\dia-eleccions.svg",
+      "PackagePath": "staticwebassets\\dia-eleccions.svg"
     },
     {
       "Id": "C:\\Users\\Andrew\\source\\repos\\FrontEleccM\\wwwroot\\favicon.png",

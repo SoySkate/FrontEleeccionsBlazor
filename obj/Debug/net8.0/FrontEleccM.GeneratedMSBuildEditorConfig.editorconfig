@@ -42,8 +42,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XFBhcnRpdENvbXBvbmVudC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Andrew/source/repos/FrontEleccM/Layout/TaulaCardComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XFRhdWxhQ2FyZENvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Andrew/source/repos/FrontEleccM/Layout/TaulaEComponent.razor]
 build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XFRhdWxhRUNvbXBvbmVudC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Andrew/source/repos/FrontEleccM/Layout/TaulaPartitComponent.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XFRhdWxhUGFydGl0Q29tcG9uZW50LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Andrew/source/repos/FrontEleccM/Pages/Configuration.razor]

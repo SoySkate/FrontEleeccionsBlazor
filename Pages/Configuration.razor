@@ -2,52 +2,59 @@
 @using BackEleccionsM.Dto
 
 @inject HttpClient Http
-
-<h3>Configuració</h3>
-<div class="divflexed">
-    <div>
-        <!--1-Omitting ""el simbolo arroba" for variables and properties keeps the code clean and concise.
-            2-Using "el simbolo arroba" for methods ensures proper delegate binding and avoids ambiguity.
-        -->
-        <CardComponent Municipi="SelectedMuni" Municipis="Municipis" OnMunicipiSelected="@HandleMunicipiSelected" /> <!--OnMunicipiSelected="HandleMunicipiSelected"-->
-        @if (SelectedMuni != null)
-        {
-             <buton class="btn-primary" @onclick="()=>deleteMuni(SelectedMuni)">Delete Selected Municipi</buton>
-        }
-       
-        <!--<ul>
-            foreach (var muni in Municipis)
-            {
-                <li><MuniComponent Municipi="muni"/></li>
-            }
-        </ul>-->
-    </div>
+<PageTitle>Configuració Eleccions</PageTitle>
+<div class="p-sm-2">
 	<!--update-->
-    <div>
-        <button @onclick="visibleMuniU">UpdateMuni</button>
-
-        <!-- Cambia la clase en función del estado de isMuniVisible -->
-        <div class="@(!isMuniUpdateVisible ? "show" : "visually-hidden")">
-            <input type="text" id="muni" @bind-value="SelectedMuni.NomMunicipi" placeholder="Nom del Municipi" />
-            <p>Regidors:</p>
-            <input type="number" id="regid" @bind-value="SelectedMuni.NumeroRegidors" placeholder="Número de regidors" />
-            <button class="botonCreate" @onclick="() => updateMuni(SelectedMuni)">Actualitza</button>
+        <div class="sticky-top">
+            <!--no esta bien hecho el visible or not-->
+            @if (SelectedMuni != null)
+            {
+                <div class="d-flex justify-content-center bg-light border-2 rounded-3">
+                    <!--SOLUCIONAR STO TAMBIEN-->
+                    <h3 class="font-monospace subrallado"> @SelectedMuni.NomMunicipi</h3>
+                </div>
+            }
         </div>
-    </div>
-    <!-- to create muni visible/not-->
+    <div class="d-sm-flex justify-content-evenly p-3">
+            <div>
+                <button class="btn btn-outline-primary" @onclick="visibleMuniU">UpdateMuni</button>
+                <!-- Cambia la clase en función del estado de isMuniVisible -->
+                <div class="@(!isMuniUpdateVisible ? "show" : "visually-hidden")">
+                    <input type="text" id="muni" @bind-value="SelectedMuni.NomMunicipi" placeholder="Nom del Municipi" />
+                    <p>Regidors:</p>
+                    <input type="number" id="regid" @bind-value="SelectedMuni.NumeroRegidors" placeholder="Número de regidors" />
+                    <p>Percentatge mínim establert:</p>
+                    <input type="number" id="percent" @bind-value="SelectedMuni.PercentatgeMinimEstablert" placeholder="MinimPercentatgeEstablert " />
+                    <button class="btn btn-outline-primary" @onclick="() => updateMuni(SelectedMuni)">Actualitza</button>
+                </div>
+            </div>
+            <!-- to create muni visible/not-->
     
-    <div>
-        <h5>Create New Municipi? -></h5>
-        <button @onclick="visibleMuniC">CrearMuni</button>
-        
-        <!-- Cambia la clase en función del estado de isMuniVisible -->
-        <div class="@(!isMuniVisible ? "show" : "visually-hidden")">
-            <input type="text" id="muni" @bind-value="Muni.NomMunicipi" placeholder="Introdueix el Municipi" />
-            <p>NUM regidors:</p>
-            <input type="number" id="regid" @bind-value="Muni.NumeroRegidors" placeholder="Introdueix el número de regidors" />
-            <button class="botonCreate" @onclick="() => createMunicipi(Muni)">Crear Municipi</button>
+            <div class="py-2 p-sm-0">
+                <button class="btn btn-outline-success" @onclick="visibleMuniC">CrearMuni</button>
+                <!-- Cambia la clase en función del estado de isMuniVisible -->
+                <div class="@(!isMuniVisible ? "show" : "visually-hidden")">
+                    <input type="text" id="muni" @bind-value="Muni.NomMunicipi" placeholder="Introdueix el Municipi" />
+                    <p>NUM regidors:</p>
+                    <input type="number" id="regid" @bind-value="Muni.NumeroRegidors" placeholder="Introdueix el número de regidors" />
+                <p>Percentatgemínim establert:</p>
+                <input type="number" id="percent" @bind-value="Muni.PercentatgeMinimEstablert" placeholder="MinimPercentatgeEstablert " />
+                    <button class="btn btn-outline-success" @onclick="() => createMunicipi(Muni)">Crear Municipi</button>
+                </div>
+            </div>
+           <div>
+                <buton class="btn btn-outline-danger" @onclick="()=>deleteMuni(SelectedMuni)">Delete Selected Municipi</buton>
+           </div>
         </div>
-    </div>
+
+        <div class="recuadro">
+            <!--1-Omitting ""el simbolo arroba" for variables and properties keeps the code clean and concise.
+                2-Using "el simbolo arroba" for methods ensures proper delegate binding and avoids ambiguity.
+            -->
+        <h5>Municipis</h5>
+            <CardComponent Municipi="SelectedMuni" Municipis="Municipis" OnMunicipiSelected="@HandleMunicipiSelected" /> <!--OnMunicipiSelected="HandleMunicipiSelected"-->
+
+        </div>
 </div>
 
 
@@ -56,6 +63,8 @@
     public MunicipiDto Muni { get; set; } = new MunicipiDto();
     private MunicipiDto SelectedMuni { get; set; } = new MunicipiDto();
     private List<MunicipiDto> Municipis { get; set; } = new List<MunicipiDto>();
+    private double MinimPercent { get; set; } = 0;
+    public Dictionary<int, double> DicMinimPercent { get; set; } = new Dictionary<int, double>();
 
 
     void HandleMunicipiSelected(MunicipiDto municipi)
@@ -70,8 +79,19 @@
     async Task createMunicipi(MunicipiDto Muni)
     {
         // var muni = new { nomMunicipi = Muni.NomMunicipi, numeroRegidors = Muni.NumeroRegidors };
+        var municipioCreado = new MunicipiDto
+            {
+                NomMunicipi = Muni.NomMunicipi,
+                NumeroRegidors = Muni.NumeroRegidors,
+                PercentatgeMinimEstablert = Muni.PercentatgeMinimEstablert
+            };
 
-        var response = await Http.PostAsJsonAsync("api/Municipi", Muni);
+        // Limpiar antes de enviar la solicitud
+        Muni.NomMunicipi = string.Empty;
+        Muni.NumeroRegidors = 0;
+        Muni.PercentatgeMinimEstablert = 0;
+
+        var response = await Http.PostAsJsonAsync("api/Municipi", municipioCreado);
 
         if (response.IsSuccessStatusCode)
         {
@@ -82,6 +102,7 @@
         {
             Console.WriteLine("Error al crear el municipio");
         }
+        visibleMuniC();
     }
     async Task updateMuni(MunicipiDto Muni)
     {
@@ -114,11 +135,19 @@
         {
             Console.WriteLine("Error al eliminado el municipio");
         }
+        // Limpiar antes de enviar la solicitud
+        Muni.NomMunicipi = string.Empty;
+        Muni.NumeroRegidors = 0;
+        Muni.PercentatgeMinimEstablert = 0;
     }
 
     protected override async Task OnInitializedAsync()
     {
         await GetMunis();
+        foreach(var min in Municipis)
+        {
+            DicMinimPercent.Add(min.ID, MinimPercent);
+        }
     }
 
     void visibleMuniC()

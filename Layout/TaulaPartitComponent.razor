@@ -1,0 +1,318 @@
+﻿@using BackEleccionsM.Dto
+@using static System.Net.WebRequestMethods
+@inject HttpClient Http
+
+<div>
+	@if (SelectedMuni != null && !string.IsNullOrWhiteSpace(SelectedMuni.NomMunicipi))
+	{
+	<h3 class="font-monospace">Resum total @SelectedMuni.NomMunicipi</h3>
+	<table class="table table-striped table-bordered">
+		<thead>
+			<tr>
+			
+					@foreach(var partit in Partits)
+					{
+						<th> @(myDictionary.ContainsKey(partit.ID) ? myDictionary[partit.ID].Item1 : "Partit Desconegut")</th>
+					}
+
+				<th>VotsNul</th>
+				<th>VotsBlanc</th>
+				<th>VotsTotals</th>
+				<th>Participació</th>
+				<th>VotsEscrotats</th>
+				<th>CensTotal</th>
+
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				@foreach (var partit in Partits)
+				{
+					<td> @(myDictionary.ContainsKey(partit.ID) ? myDictionary[partit.ID].Item2 : "Desconegut")</td>
+				}
+
+				<td>@ResultatsFinal.VotsNul</td>
+				<td>@ResultatsFinal.VotsBlanc</td>
+				<td>@ResultatsFinal.VotsTotals</td>
+				<td>@Participacio %</td>
+				<td>@VotsEscrotats</td>
+				<td>@TaulaCensFinal</td>
+
+			</tr>
+
+		</tbody>
+	</table>
+		<h5>Llista Regidors:</h5>
+		<table class="table">
+
+			<thead>
+				<tr>
+					<th>Partit</th>
+					<th>Candidat</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var partit in Partits)
+				{
+					if (ReglaHontDic.ContainsKey(partit.ID)) // Verificar si el partido tiene escaños asignados
+					{
+						int escons = ReglaHontDic[partit.ID]; // Número de escaños asignados
+						var candidatsDelPartit = Candidats
+						.Where(c => c.PartitPoliticId == partit.ID) // Filtrar candidatos por partido
+						.Take(escons); // Seleccionar solo los necesarios según el número de escaños
+
+						foreach (var candidat in candidatsDelPartit)
+						{
+							<tr>
+								<td>@partit.NomPartit</td>
+								<td>@candidat.NomCandidat</td>
+							</tr>
+						}
+					}
+				}
+			</tbody>
+		</table>
+		<h5>Escons Repartits:</h5>
+			@foreach(var dic in myDictionary)
+			{
+				int escons = ReglaHontDic.ContainsKey(dic.Key) ? ReglaHontDic[dic.Key] : 0;
+				<p>@dic.Value.Item1 = @escons escons.</p>
+			}
+
+		<h5>Taules @SelectedMuni.NomMunicipi</h5>
+		@foreach (var taula in Taules)
+		{
+			<TaulaCardComponent Taula="taula" Partits="Partits" />
+		}
+		Console.WriteLine();
+	}
+
+
+</div>
+@code {
+	[Parameter]
+	public MunicipiDto SelectedMuni { get; set; }
+
+	private List<TaulaElectoralDto> Taules { get; set; } = new List<TaulaElectoralDto>();
+	private TaulaElectoralDto Taula { get; set; } = new TaulaElectoralDto();
+
+	//partitsP
+	private PartitPoliticDto Partit { get; set; } = new PartitPoliticDto();
+	private PartitPoliticDto SelectedPartit { get; set; } = new PartitPoliticDto();
+	public List<PartitPoliticDto> Partits { get; set; } = new List<PartitPoliticDto>();
+
+	//Candidats
+	private CandidatDto Candidat { get; set; } = new CandidatDto();
+	private CandidatDto SelectedCandidat { get; set; } = new CandidatDto();
+	private List<CandidatDto> Candidats { get; set; } = new List<CandidatDto>();
+
+	//results y vots
+	private ResultatsTaulaDto ResultatsTaula { get; set; } =new ResultatsTaulaDto();
+	private List<ResultatsTaulaDto> ResultatsList { get; set; } =new List<ResultatsTaulaDto>();
+	private List<VotsPerPartitDto> Vots { get; set; } = new List<VotsPerPartitDto>();
+
+	//FINAL
+	//private List<VotsPerPartitDto> VotsFinal { get; set; } = new List<VotsPerPartitDto>();
+	private ResultatsTaulaDto ResultatsFinal { get; set; } = new ResultatsTaulaDto();
+	private int TaulaCensFinal { get; set; } = 0;
+	private int VotsFinal { get; set; } = 0;
+	private int VotsFPartits { get; set; } = 0;
+	public double Participacio { get; set; } = 0;
+	public int VotsEscrotats { get; set; } = 0;
+	private List<PHont> LlistaDivs { get; set; } = new List<PHont>();
+
+	private Dictionary<int, (string, int)> myDictionary = new Dictionary<int, (string, int)>();
+	private class Hont
+	{
+		public int numRegi { get; set; }
+		public double numDiv { get; set; }
+	}
+	private class PHont
+	{
+		public int PID { get; set; }
+		public List<Hont> honts { get; set; }
+	}
+	private Dictionary<int, double> myDicParitVotsHont = new Dictionary<int, double>();
+	//crec que aquest es el real dicc xd:
+	//idPartit y numEscons
+	//Este es el diccionario para saber los esaños de cada partidoo
+	public Dictionary<int, int> ReglaHontDic = new Dictionary<int,int>();
+
+
+	async Task butonclick()
+	{
+		await getVots();
+		await getTaules(SelectedMuni);
+		await getPartits(SelectedMuni);
+		await getAllCandidats(SelectedMuni);
+		await posarDataPerEscons();
+		await ponerDataDic();
+		participacio();
+		regladhont();
+		// Asegúrate de que los datos están actualizados antes de renderizar
+		StateHasChanged();
+	}
+	protected override async Task OnParametersSetAsync()
+	{
+		await butonclick();
+	}
+	async Task ponerDataDic()
+	{
+		myDictionary.Clear();
+
+		foreach (var partit in Partits)
+		{
+			int NumVotPartit = 0;
+			foreach (var vot in Vots)
+			{
+
+				if (vot.PartitId == partit.ID)
+				{
+					NumVotPartit += vot.NumeroVotsLlista;
+				}
+
+			}
+			if (!myDictionary.ContainsKey(partit.ID))
+			{ myDictionary.Add(partit.ID, (partit.NomPartit, NumVotPartit)); }
+		}
+	}
+	void regladhont()
+	{
+		ReglaHontDic.Clear();
+		Dictionary<int, double> Cocientes = new Dictionary<int, double>();
+
+		foreach(var partit in Partits)
+		{
+			if (!ReglaHontDic.ContainsKey(partit.ID)) { ReglaHontDic.Add(partit.ID, 0); }
+		}
+		int escons = SelectedMuni.NumeroRegidors;
+		//minimPercent
+		double umbralMinimo = SelectedMuni.PercentatgeMinimEstablert / 100.0;
+
+		while (escons > 0)
+		{
+			// Paso 3.1: Calcular los cocientes actuales para cada partido
+			Cocientes.Clear(); // Reinicia los cocientes en cada iteración
+			foreach (var partit in myDictionary)
+			{
+				// Solo consideramos partidos que superan el umbral mínimo
+				double minVotos = myDictionary[partit.Key].Item2 * umbralMinimo;
+				if (myDictionary[partit.Key].Item2 >= minVotos)
+				{
+					// Cociente = Votos del partido / (escaños asignados + 1)
+					int escañosAsignados = ReglaHontDic[partit.Key];
+					Cocientes[partit.Key] = (double)partit.Value.Item2 / (escañosAsignados + 1);
+				}
+			}
+
+			//Buscar el mayor cociente
+			var maxPartit = Cocientes.OrderByDescending(c => c.Value).FirstOrDefault();
+
+			//Asignar un escaño al partido con el mayor cociente
+			if (maxPartit.Key != 0)
+			{
+				ReglaHontDic[maxPartit.Key]++; // Incrementar el número de escaños asignados
+				escons--; // Reducir el número de escaños restantes
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+	void participacio()
+	{
+		Participacio = 0;
+		VotsEscrotats = 0;
+		double val;
+		double roundedv;
+		if (TaulaCensFinal > 0) // Evita divisió per zero
+		{
+			val = (ResultatsFinal.VotsTotals / (double)TaulaCensFinal) * 100;
+			roundedv = Math.Round(val, 2);
+			Participacio = roundedv;
+
+		}
+		else
+		{
+			Participacio = 0; // Assigna 0 si no hi ha cens
+		}
+
+		VotsEscrotats += VotsFPartits;
+		VotsEscrotats += ResultatsFinal.VotsNul;
+		VotsEscrotats += ResultatsFinal.VotsBlanc;
+	}
+	async Task getVots()
+	{
+		var vots = await Http.GetFromJsonAsync<List<VotsPerPartitDto>>($"api/VotsPerPartit");
+		Vots = vots;
+	}
+	async Task getAllCandidats(MunicipiDto muni)
+	{
+		var candidats = await Http.GetFromJsonAsync<List<CandidatDto>>($"api/Candidat/muni/{muni.ID}");
+		Candidats = candidats;
+	}
+	async Task posarDataPerEscons()
+	{
+		ResultatsList.Clear();
+		ResultatsFinal.VotsNul = 0;
+		ResultatsFinal.VotsBlanc = 0;
+		ResultatsFinal.VotsTotals = 0; 
+		TaulaCensFinal = 0;
+		VotsFinal = 0;
+		VotsFPartits = 0;
+		foreach(var taula in Taules)
+		{
+			TaulaCensFinal += taula.CensTaula;
+			await getResultatsT(taula);
+			ResultatsList.Add(ResultatsTaula);
+		}
+		foreach(var partit in Partits)
+		{
+			VotsFinal = 0;
+			var votsPartit = await Http.GetFromJsonAsync<List<VotsPerPartitDto>>($"api/VotsPerPartit/partitID/{partit.ID}");
+			foreach(var vot in votsPartit)
+			{
+				VotsFinal+= vot.NumeroVotsLlista;
+				VotsFPartits += vot.NumeroVotsLlista;
+			}
+		}
+		foreach(var res in ResultatsList)
+		{
+			ResultatsFinal.VotsNul += res.VotsNul;
+			ResultatsFinal.VotsBlanc += res.VotsBlanc;
+			ResultatsFinal.VotsTotals += res.VotsTotals;
+		}
+	}
+	async Task getResultatsT(TaulaElectoralDto taula)
+	{
+		if (taula != null)
+		{
+			var resultatT = await Http.GetFromJsonAsync<ResultatsTaulaDto>($"api/ResultatsTaula/taulaID/{taula.ID}");
+			ResultatsTaula = resultatT;
+		}
+	}
+	protected override async Task OnInitializedAsync()
+	{
+		
+	}
+	async Task getTaules(MunicipiDto Idmuni)
+	{
+		if (Idmuni != null)
+		{
+			var taules = await Http.GetFromJsonAsync<List<TaulaElectoralDto>>($"api/TaulaElectoral/muniID/{Idmuni.ID}");
+			Taules = taules ?? new List<TaulaElectoralDto>();
+		}
+	}
+	async Task getPartits(MunicipiDto Idmuni)
+	{
+		if (Idmuni != null)
+		{
+			var partits = await Http.GetFromJsonAsync<List<PartitPoliticDto>>($"api/PartitPolitic/muniID/{Idmuni.ID}");
+			Partits = partits ?? new List<PartitPoliticDto>();
+		}
+
+	}
+
+
+}

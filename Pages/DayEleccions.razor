@@ -1,7 +1,88 @@
 ﻿@page "/eleccions"
+@using BackEleccionsM.Dto
+@inject HttpClient Http
 
-<h3>DayEleccions</h3>
+<h3>Dia Eleccions:</h3>
+
+<div>
+    <button class="btn btn-primary mb-3" @onclick="ToggleMenu">
+        @((isMenuOpen ? $"{SelectedMuni.NomMunicipi} {SelectedMuni.NumeroRegidors}" : "Mostrar Munis"))
+    </button>
+    @if (isMenuOpen)
+    {
+        <div class="d-flex justify-content-evenly">
+            @foreach (var Muni in Municipis)
+            {
+                <button @onclick="()=>selectMuni(Muni)" class="btn btn-primary">
+                    @Muni.NomMunicipi
+                </button>
+
+            }
+        </div>
+        <TaulaPartitComponent SelectedMuni="SelectedMuni"/>
+    }
+
+</div>
 
 @code {
+    private bool isMenuOpen = false;
 
+    //municipis
+    private MunicipiDto Municipi { get; set; }= new MunicipiDto();
+    private MunicipiDto SelectedMuni { get; set; }= new MunicipiDto();
+    private List<MunicipiDto> Municipis { get; set; }= new List<MunicipiDto>();
+
+    //taulesElectorals
+    private TaulaElectoralDto Taula { get; set; } = new TaulaElectoralDto();
+    private TaulaElectoralDto SelectedTaula { get; set; } = new TaulaElectoralDto();
+    private List<TaulaElectoralDto> Taules { get; set; } = new List<TaulaElectoralDto>();
+
+    //ResultatTaulesElectorals
+    private ResultatsTaulaDto ResultatTaula { get; set; } = new ResultatsTaulaDto();
+    private ResultatsTaulaDto SelectedResultatTaula { get; set; } = new ResultatsTaulaDto();
+    private List<ResultatsTaulaDto> ResultatsT { get; set; } = new List<ResultatsTaulaDto>();
+
+    //votsPartit per Resultat
+    private VotsPerPartitDto VotPerPartit { get; set; } = new VotsPerPartitDto();
+    private VotsPerPartitDto SelectedVotPerPartit { get; set; } = new VotsPerPartitDto();
+    private List<VotsPerPartitDto> VotsList { get; set; } = new List<VotsPerPartitDto>();
+
+    //partitsP
+    private PartitPoliticDto Partit { get; set; } = new PartitPoliticDto();
+    private PartitPoliticDto SelectedPartit { get; set; } = new PartitPoliticDto();
+    private List<PartitPoliticDto> Partits { get; set; } = new List<PartitPoliticDto>();
+
+    // Método para alternar el menú
+    private void ToggleMenu()
+    {
+        isMenuOpen = !isMenuOpen;
+    }
+    void selectMuni(MunicipiDto muni)
+    {
+        SelectedMuni = muni;
+    } 
+    protected override async Task OnInitializedAsync()
+    {
+        await GetMunis();
+    }
+
+    async Task GetMunis()
+    {
+        try
+        {
+            var munis = await Http.GetFromJsonAsync<List<MunicipiDto>>("api/Municipi");
+            if (munis != null)
+            {
+                foreach (var muni in munis)
+                {
+                    Console.WriteLine($"Municipi recibido: ID={muni.ID}, Nombre={muni.NomMunicipi}, Regidors={muni.NumeroRegidors}");
+                }
+                Municipis = munis;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al obtener municipios: {ex.Message}");
+        }
+    }
 }

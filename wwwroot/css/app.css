@@ -101,3 +101,63 @@ a, .btn-link {
 code {
     color: #c02d76;
 }
+
+.li-hover:hover {
+    background-color: #007bff ; /* Cambia el color de fondo al pasar el ratón */
+    color: white; /* Cambia el texto a blanco */
+}
+
+.bg-muni {
+    border-bottom: 1rem solid gray; /* Personaliza el borde */
+    border-radius: 2rem;
+}
+
+.bg-muni:hover{
+  border-color:lightgreen;
+}
+
+.center-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.subrallado {
+    border-bottom: 0.2rem solid;
+    border-color: #007bff; /* Color del subrayado */
+    transition: border-color 0.5s ease; /* Animación suave al cambiar de color */
+}
+
+.pad-x{
+   padding-left:2rem;
+}
+.pad-b {
+    padding-bottom: 2rem;
+}
+.pad-t{
+    padding-top: 2rem;
+}
+.z{
+    z-index:280;
+}
+.recuadro {
+    border: 0.1rem solid ;
+    border-color: #4d14db ; /* Color del subrayado */
+    transition: border-color 0.5s ease ; /* Animación suave al cambiar de color */
+    padding:2rem ;
+}
+
+@media (max-width: 575px) {
+    .recuadro {
+        border: 0.1rem solid;
+        border-color: #4d14db; /* Color del subrayado */
+        transition: border-color 0.5s ease; /* Animación suave al cambiar de color */
+        padding: 1rem;
+    }
+}
+h5{
+    font-family:Bahnschrift;
+    color:rebeccapurple;
+}
+.green {
+    background-color: lime;
+}

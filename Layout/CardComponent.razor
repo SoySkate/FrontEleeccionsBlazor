@@ -1,98 +1,102 @@
 ﻿@using BackEleccionsM.Dto
 @inject HttpClient Http
+@inject SignalRService SignalRService
 
-<div>
-	<h3>MIS MUNIS CARD from cardComponent</h3>
-	<div>
-		<ul>
+
+<div class="row-2 align-content-center">
+
+	<div class="">
+		<ul class="d-sm-flex list-unstyled justify-content-between">
 			@foreach (var muni in Municipis)
 			{
-				<li @onclick="() => SelectMunicipi(muni)"><MuniComponent Municipi="muni" /></li>
+				<li class="bg-muni" @onclick="() => SelectMunicipi(muni)"><MuniComponent Municipi="muni" /></li>
 			}
 		</ul>
-		@if(SelectedMuni!=null)
+		<div class="d-sm-flex justify-content-evenly">
+			@if (SelectedMuni != null && !string.IsNullOrWhiteSpace(SelectedMuni.NomMunicipi))
 		{
-			<div>
-				<h5>Selected Municipi:</h5>
-				<p><strong>Nom:</strong> @SelectedMuni.NomMunicipi</p>
-				<p><strong>Número de regidors:</strong> @SelectedMuni.NumeroRegidors</p>
-				<!-- Aquí puedes agregar más detalles si los tienes disponibles -->
-			</div>
-			<div>
+				<div class="recuadro">
 				<h5>Partits Polítics</h5>
 				<ul>
 					@foreach (var partit in Partits)
 					{
-						<li @onclick="() => selectPartit(partit)"><PartitComponent Partit="partit" /></li>
+							<li @onclick="() => selectPartit(partit)" class="@(SelectedPartit==partit?"subrallado":"")"><PartitComponent Partit="partit" /></li>
 					}
 				</ul>
-				@if (SelectedPartit != null)
+					<button class="btn btn-outline-success" @onclick="visiblePartitC">CrearPartit</button>
+					<div class="@(!isVisiblePartitC ? "show" : "visually-hidden")">
+						<input type="text" name="name" @bind-value="Partit.NomPartit" placeholder="Crear Nom Partit" />
+						<button class="btn btn-outline-success" @onclick="() => createPartit(Partit, SelectedMuni.ID)">Crear Partit</button>
+					</div>
+					@if (SelectedPartit != null && !string.IsNullOrWhiteSpace(SelectedPartit.NomPartit))
 				{
-					<buton class="btn-primary" @onclick="()=>deletePartit(SelectedPartit)">Delete Selected Partit</buton>
+						<button class="btn btn-outline-primary" @onclick="visiblePartitU">UpdatePartit</button>
+						<div class="@(!isVisiblePartitU ? "show" : "visually-hidden")">
+							<input type="text" name="name" @bind-value="SelectedPartit.NomPartit" placeholder="Nom Partit" />
+							<button class="btn btn-outline-primary" @onclick="() => updatePartit(SelectedPartit)">Actualitzar Partit</button>
+						</div>
+
+					
+						<buton class="btn btn-outline-danger" @onclick="()=>deletePartit(SelectedPartit)">Delete Selected Partit</buton>
+				<div class="recuadro">
+					<h5>Candidats</h5>
 					<ol>
 						@foreach (var candidat in Candidats)
 						{
-							<li @onclick="() => selectCandidat(candidat)"><CandidatComponent Candidat="candidat" /></li>
+								<li @onclick="() => selectCandidat(candidat)" class="@(SelectedCandidat == candidat ? "subrallado" : "")"><CandidatComponent Candidat="candidat" /></li>
 						}
 					</ol>
-					@if(SelectedCandidat !=null){
-					<button @onclick="visibleCandidatU">UpdateCandidat</button>
+
+						<button class="btn btn-outline-success" @onclick="visibleCandidatC">CrearCandidat</button>
+						<div class="@(!isVisibleCandidatC ? "show" : "visually-hidden")">
+							<input type="text" name="name" @bind-value="Candidat.NomCandidat" placeholder="Crear Nom Candidat" />
+							<button class="btn btn-outline-success" @onclick="() => createCandidat(Candidat, SelectedPartit.ID)">Crear</button>
+						</div>
+					@if(SelectedCandidat !=null && !string.IsNullOrWhiteSpace(SelectedCandidat.NomCandidat)){
+							<button class="btn btn-outline-primary" @onclick="visibleCandidatU">UpdateCandidat</button>
 					<div class="@(!isVisibleCandidatU ? "show" : "visually-hidden")">
 						<input type="text" name="name" @bind-value="SelectedCandidat.NomCandidat" placeholder="Nom Candidat" />
-						<button class="botonCreate" @onclick="() => updateCandidat(SelectedCandidat)">Actualitzar Candidat</button>
+						<button class="btn btn-outline-primary" @onclick="() => updateCandidat(SelectedCandidat)">Actualitzar Candidat</button>
 					</div>
-
-					<button @onclick="visibleCandidatC">CrearCandidat</button>
-					<div class="@(!isVisibleCandidatC ? "show" : "visually-hidden")">
-						<input type="text" name="name" @bind-value="Candidat.NomCandidat" placeholder="Crear Nom Candidat" />
-						<button class="botonCreate" @onclick="() => createCandidat(Candidat, SelectedPartit.ID)">Crear Candidat</button>
-					</div>
-					<buton class="btn-primary" @onclick="()=>deleteCandidat(SelectedCandidat)">Delete Selected Candidat</buton>
+							<buton class="btn btn-outline-danger" @onclick="()=>deleteCandidat(SelectedCandidat)">Delete Selected Candidat</buton>
 					}
+				</div>
 				}	
-				<button @onclick="visiblePartitU">UpdatePartit</button>
-				<div class="@(!isVisiblePartitU ? "show" : "visually-hidden")">
-					<input type="text" name="name" @bind-value="SelectedPartit.NomPartit" placeholder="Nom Partit" />
-					<button class="botonCreate" @onclick="() => updatePartit(SelectedPartit)">Actualitzar Partit</button>
-				</div>
-				
-				<button @onclick="visiblePartitC">CrearPartit</button>
-				<div class="@(!isVisiblePartitC ? "show" : "visually-hidden")">
-					<input type="text" name="name" @bind-value="Partit.NomPartit" placeholder="Crear Nom Partit"/>
-					<button class="botonCreate" @onclick="() => createPartit(Partit, SelectedMuni.ID)">Crear Partit</button>
-				</div>
+	
 				<!--<button class="btn-primary" onclick="() => createPartit(Partit, SelectedMuni.ID)">Crear Partit</button>-->
 			</div>
-			<div>
+				<div class="recuadro">
 				<h5>Taules Electorals</h5>
 				<ul>
 					@foreach(var taula in Taules)
 					{
-						<li @onclick="()=> selectedTaula(taula)"><TaulaEComponent Taula="taula" /></li>
+						<li @onclick="()=> selectedTaula(taula)" class="@(SelectedTaula == taula?"subrallado":"")"><TaulaEComponent Taula="taula" /></li>
 					}
-					<buton class="btn-primary" @onclick="()=>deleteTaula(SelectedTaula)">Delete Selected Taula</buton>
-					
 				</ul>
-				<button @onclick="visibleTaulaU">UpdateTaula</button>
+					<button class="btn btn-outline-success" @onclick="visibleTaulaC">CrearTaula</button>
+					<div class="@(!isVisibleTaulaC ? "show" : "visually-hidden")">
+						<input type="text" name="name" @bind-value="Taula.NomTaula" placeholder="Crear Nom Taula" />
+						<input type="number" name="name" @bind-value="Taula.CensTaula" placeholder="Crear Cens Taula" />
+						<button class="btn btn-outline-success" @onclick="() => createTaula(Taula, SelectedMuni.ID)">Crear Taula</button>
+					</div>
+					@if (SelectedTaula != null && !string.IsNullOrWhiteSpace(SelectedTaula.NomTaula)){
+						<button class="btn btn-outline-primary" @onclick="visibleTaulaU">UpdateTaula</button>
 				<div class="@(!isVisibleTaulaU ? "show" : "visually-hidden")">
 					<input type="text" name="name" @bind-value="SelectedTaula.NomTaula" placeholder="Nom Taula" />
 					<input type="number" name="name" @bind-value="SelectedTaula.CensTaula" placeholder="Cens Taula" />
-					<button class="botonCreate" @onclick="() => updateTaula(SelectedTaula)">Actualitzar Taula</button>
+							<button class="btn btn-outline-primary" @onclick="() => updateTaula(SelectedTaula)">Actualitzar Taula</button>
 				</div>
-
-				<button @onclick="visibleTaulaC">CrearTaula</button>
-				<div class="@(!isVisibleTaulaC ? "show" : "visually-hidden")">
-					<input type="text" name="name" @bind-value="Taula.NomTaula" placeholder="Crear Nom Taula" />
-					<input type="number" name="name" @bind-value="Taula.CensTaula" placeholder="Crear Cens Taula" />
-					<button class="botonCreate" @onclick="() => createTaula(Taula, SelectedMuni.ID)">Crear Taula</button>
-				</div>
+						<buton class="btn btn-outline-danger" @onclick="()=>deleteTaula(SelectedTaula)">Delete Selected Taula</buton>
+					}
 			</div>
 		}
+		</div>
 	</div>
 </div>
 
 
 @code {
+
 	[Parameter]
 	public MunicipiDto Municipi { get; set; } 
 
@@ -103,6 +107,7 @@
 	public MunicipiDto SelectedMuni { get; set; }
 	[Parameter]
 	public EventCallback<MunicipiDto> OnMunicipiSelected { get; set; }
+
 	//partitsP
 	private PartitPoliticDto Partit { get; set; } = new PartitPoliticDto();
 	private PartitPoliticDto SelectedPartit { get; set; } = new PartitPoliticDto();
@@ -130,10 +135,20 @@
 	private bool isVisibleCandidatC { get; set; } = true;
 	private bool isVisibleCandidatU { get; set; } = true;
 
+	void clearVars()
+	{
+		SelectedCandidat = new CandidatDto() ;
+		SelectedPartit = new PartitPoliticDto();
+		SelectedTaula = new TaulaElectoralDto();
+		Taules.Clear();
+		Partits.Clear();
+		Candidats.Clear();
+	}
 
 	// Método para manejar la selección de un municipio
 	async Task SelectMunicipi(MunicipiDto municipi)
 	{
+		clearVars();
 		SelectedMuni = municipi;
 		Console.WriteLine("Selecting ID muni: "+ SelectedMuni.ID);
 		//Invoke lo que hace es "invocar" la funcion de HandleMunicipiSelected()
@@ -141,6 +156,7 @@
 		await OnMunicipiSelected.InvokeAsync(SelectedMuni); //le envia la info al padre
 		await getPartits(SelectedMuni);
 		await getTaules(SelectedMuni);
+		Console.WriteLine(SelectedPartit.NomPartit+"Vemos que partido esta seleccionado");
 	}
 	async Task selectPartit(PartitPoliticDto partit)
 	{
@@ -214,8 +230,8 @@
 			await getPartits(SelectedMuni);
 		}
 		else { Console.WriteLine("Error al crear el PartidoP"); }
-
 	}
+
 	async Task deletePartit(PartitPoliticDto Partit)
 	{
 		var response = await Http.DeleteAsync($"api/PartitPolitic/{Partit.ID}");
@@ -226,6 +242,7 @@
 		}
 		else { Console.WriteLine("Error al eliminar el PartidoP"); }
 	}
+	//update partit
 	async Task updatePartit(PartitPoliticDto Partit)
 	{
 		var response = await Http.PutAsJsonAsync($"api/PartitPolitic/{Partit.ID}", Partit);
@@ -236,7 +253,38 @@
 		}
 		else { Console.WriteLine("Error al actualizar el PartidoP"); }
 	}
+	// Método para manejar las actualizaciones que llegan desde SignalR
+	// private void OnPartitUpdated(PartitPoliticDto partitUpdate)
+	// {
+	// 	var index = Partits.FindIndex(p => p.ID == partitUpdate.ID);
+	// 	if (index != -1)
+	// 	{
+	// 		Partits[index] = partitUpdate; Actualiza el partido en la lista local
+	// 	}
+	// 	else
+	// 	{
+	// 		Partits.Add(partitUpdate); Si el partido no está en la lista, lo agrega
+	// 	}
 
+	// 	Esto asegura que la interfaz de usuario se actualice
+	// 	StateHasChanged();
+	// }
+	// Inicializa la conexión de SignalR y se suscribe al evento
+	// protected override async Task OnInitializedAsync()
+	// {
+	// 	Inicia la conexión de SignalR
+	// 	await SignalRService.StartAsync();
+
+	// 	Se suscribe al evento de actualización de partidos
+	// 	SignalRService.PartitUpdated += OnPartitUpdated;
+	// }
+
+	// Limpiar la suscripción cuando el componente se destruya
+	// public async ValueTask DisposeAsync()
+	// {
+	// 	SignalRService.PartitUpdated -= OnPartitUpdated;
+	// 	await SignalRService.DisposeAsync();
+	// }
 	//CRUD TAULA
 	async Task deleteTaula(TaulaElectoralDto taula)
 	{
@@ -263,6 +311,16 @@
 		taula.MunicipiId = IdMuni;
 
 		var response = await Http.PostAsJsonAsync("api/TaulaElectoral", taula);
+		var listT = await Http.GetFromJsonAsync<List<TaulaElectoralDto>>($"api/TaulaElectoral/muniID/{IdMuni}");
+		var currentT = listT.Where(t => t.NomTaula == taula.NomTaula).FirstOrDefault();
+
+		var result = new ResultatsTaulaDto();
+		result.TaulaElectoralId = currentT.ID;
+		Console.WriteLine("ID taulacreada: " + currentT.ID);
+		//como la relacion es 1 a 1 creamos al mismo tiempo el resultat taula
+
+		await Http.PostAsJsonAsync("api/ResultatsTaula", result);
+
 		if (response.IsSuccessStatusCode)
 		{
 			Console.WriteLine("TaulaElectoral creada correctamente");

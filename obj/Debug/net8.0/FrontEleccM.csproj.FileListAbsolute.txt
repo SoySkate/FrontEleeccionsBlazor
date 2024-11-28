@@ -1,9 +1,3 @@
-C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\FrontEleccM.csproj.AssemblyReference.cache
-C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\FrontEleccM.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\FrontEleccM.AssemblyInfoInputs.cache
-C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\FrontEleccM.AssemblyInfo.cs
-C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\FrontEleccM.csproj.CoreCompileInputs.cache
-C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\FrontEleccM.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\blazor.boot.json
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\blazor.webassembly.js
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\dotnet.js
@@ -22,7 +16,14 @@ C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Mic
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.AspNetCore.Components.wasm
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.AspNetCore.Components.Web.wasm
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.AspNetCore.Components.WebAssembly.wasm
+C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.AspNetCore.Connections.Abstractions.wasm
+C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.AspNetCore.Http.Connections.Client.wasm
+C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.AspNetCore.Http.Connections.Common.wasm
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.AspNetCore.Metadata.wasm
+C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.AspNetCore.SignalR.Client.Core.wasm
+C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.AspNetCore.SignalR.Client.wasm
+C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.AspNetCore.SignalR.Common.wasm
+C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.AspNetCore.SignalR.Protocols.Json.wasm
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.CSharp.wasm
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.Extensions.Configuration.Abstractions.wasm
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.Extensions.Configuration.Binder.wasm
@@ -31,6 +32,7 @@ C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Mic
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.Extensions.Configuration.wasm
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.Extensions.DependencyInjection.Abstractions.wasm
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.Extensions.DependencyInjection.wasm
+C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.Extensions.Features.wasm
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.Extensions.FileProviders.Abstractions.wasm
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.Extensions.FileProviders.Physical.wasm
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.Extensions.FileSystemGlobbing.wasm
@@ -214,6 +216,7 @@ C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Sys
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Threading.Tasks.Parallel.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.ServiceProcess.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Text.Json.wasm.gz
+C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.AspNetCore.Http.Connections.Common.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Net.WebClient.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Net.NetworkInformation.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Data.Common.wasm.gz
@@ -225,6 +228,7 @@ C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Sys
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Net.NameResolution.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\dotnet.runtime.8.0.10.39apnb5yx8.js.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Core.wasm.gz
+C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.AspNetCore.Http.Connections.Client.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.Win32.Registry.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Private.Xml.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.IO.FileSystem.AccessControl.wasm.gz
@@ -248,6 +252,7 @@ C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Sys
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Security.SecureString.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Text.Encodings.Web.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Text.Encoding.Extensions.wasm.gz
+C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.AspNetCore.SignalR.Common.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Security.Cryptography.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.IO.MemoryMappedFiles.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Security.Principal.wasm.gz
@@ -284,6 +289,7 @@ C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Sys
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Net.Security.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Diagnostics.FileVersionInfo.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Runtime.InteropServices.JavaScript.wasm.gz
+C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.AspNetCore.SignalR.Client.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\dotnet.runtime.js.map.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Xml.XPath.XDocument.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Diagnostics.Debug.wasm.gz
@@ -309,6 +315,7 @@ C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Sys
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.VisualBasic.Core.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\blazor.webassembly.js.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\dotnet.js.gz
+C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.Extensions.Features.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.IO.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.AspNetCore.Metadata.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Security.Cryptography.X509Certificates.wasm.gz
@@ -318,6 +325,7 @@ C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Mic
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.IO.Pipelines.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Xml.Serialization.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.IO.Compression.FileSystem.wasm.gz
+C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.AspNetCore.SignalR.Protocols.Json.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Data.DataSetExtensions.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Net.Mail.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Net.WebHeaderCollection.wasm.gz
@@ -345,6 +353,7 @@ C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Sys
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Runtime.InteropServices.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Text.RegularExpressions.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Resources.Reader.wasm.gz
+C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.AspNetCore.SignalR.Client.Core.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.VisualBasic.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.ServiceModel.Web.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Net.WebSockets.Client.wasm.gz
@@ -355,6 +364,7 @@ C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Sys
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\icudt_CJK.dat.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.JSInterop.WebAssembly.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.Extensions.FileProviders.Abstractions.wasm.gz
+C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\Microsoft.AspNetCore.Connections.Abstractions.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Net.Primitives.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Diagnostics.Tools.wasm.gz
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\wwwroot\_framework\System.Threading.Channels.wasm.gz
@@ -422,7 +432,14 @@ C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\Microsoft.AspNetCore.C
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\Microsoft.AspNetCore.Components.Forms.dll
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\Microsoft.AspNetCore.Components.Web.dll
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\Microsoft.AspNetCore.Components.WebAssembly.dll
+C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\Microsoft.AspNetCore.Connections.Abstractions.dll
+C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\Microsoft.AspNetCore.Http.Connections.Client.dll
+C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\Microsoft.AspNetCore.Http.Connections.Common.dll
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\Microsoft.AspNetCore.Metadata.dll
+C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\Microsoft.AspNetCore.SignalR.Client.dll
+C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\Microsoft.AspNetCore.SignalR.Client.Core.dll
+C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\Microsoft.AspNetCore.SignalR.Common.dll
+C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\Microsoft.AspNetCore.SignalR.Protocols.Json.dll
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\Microsoft.Extensions.Configuration.dll
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\Microsoft.Extensions.Configuration.Abstractions.dll
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\Microsoft.Extensions.Configuration.Binder.dll
@@ -430,6 +447,7 @@ C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\Microsoft.Extensions.C
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\Microsoft.Extensions.Configuration.Json.dll
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\Microsoft.Extensions.Features.dll
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\Microsoft.Extensions.FileProviders.Abstractions.dll
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\Microsoft.Extensions.FileProviders.Physical.dll
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\Microsoft.Extensions.FileSystemGlobbing.dll
@@ -617,12 +635,26 @@ C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\dotnet.runtime.js.map
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\icudt_CJK.dat
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\icudt_EFIGS.dat
 C:\Users\Andrew\source\repos\FrontEleccM\bin\Debug\net8.0\icudt_no_CJK.dat
+C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\FrontEleccM.csproj.AssemblyReference.cache
+C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\FrontEleccM.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\FrontEleccM.AssemblyInfoInputs.cache
+C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\FrontEleccM.AssemblyInfo.cs
+C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\FrontEleccM.csproj.CoreCompileInputs.cache
+C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\FrontEleccM.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\FrontEleccM.sourcelink.json
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\webcil\Microsoft.AspNetCore.Authorization.wasm
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\webcil\Microsoft.AspNetCore.Components.wasm
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\webcil\Microsoft.AspNetCore.Components.Forms.wasm
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\webcil\Microsoft.AspNetCore.Components.Web.wasm
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\webcil\Microsoft.AspNetCore.Components.WebAssembly.wasm
+C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\webcil\Microsoft.AspNetCore.Connections.Abstractions.wasm
+C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\webcil\Microsoft.AspNetCore.Http.Connections.Client.wasm
+C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\webcil\Microsoft.AspNetCore.Http.Connections.Common.wasm
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\webcil\Microsoft.AspNetCore.Metadata.wasm
+C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\webcil\Microsoft.AspNetCore.SignalR.Client.wasm
+C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\webcil\Microsoft.AspNetCore.SignalR.Client.Core.wasm
+C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\webcil\Microsoft.AspNetCore.SignalR.Common.wasm
+C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\webcil\Microsoft.AspNetCore.SignalR.Protocols.Json.wasm
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\webcil\Microsoft.Extensions.Configuration.wasm
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\webcil\Microsoft.Extensions.Configuration.Abstractions.wasm
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\webcil\Microsoft.Extensions.Configuration.Binder.wasm
@@ -630,6 +662,7 @@ C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\webcil\Microsoft.Exten
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\webcil\Microsoft.Extensions.Configuration.Json.wasm
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\webcil\Microsoft.Extensions.DependencyInjection.wasm
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\webcil\Microsoft.Extensions.DependencyInjection.Abstractions.wasm
+C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\webcil\Microsoft.Extensions.Features.wasm
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\webcil\Microsoft.Extensions.FileProviders.Abstractions.wasm
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\webcil\Microsoft.Extensions.FileProviders.Physical.wasm
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\webcil\Microsoft.Extensions.FileSystemGlobbing.wasm
@@ -828,7 +861,14 @@ C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\compressed\5fz74saubd.
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\compressed\l9pl6umfkw.gz
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\compressed\ynoe9qhtj4.gz
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\compressed\i9y5sxmbmy.gz
+C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\compressed\r48llhwetb.gz
+C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\compressed\3oa08vuhn6.gz
+C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\compressed\1aah53hj89.gz
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\compressed\h4oyn7h3oh.gz
+C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\compressed\clc9v7ql7k.gz
+C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\compressed\ouk9raeutf.gz
+C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\compressed\766t2uea1s.gz
+C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\compressed\jftovl9ygc.gz
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\compressed\w9tz2gkc5s.gz
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\compressed\srbwqw40gk.gz
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\compressed\5zldr46eki.gz
@@ -836,6 +876,7 @@ C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\compressed\aqf2mnu5rw.
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\compressed\23a64cbuuf.gz
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\compressed\tdoqr6s20c.gz
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\compressed\tyr6ulz7ar.gz
+C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\compressed\gtb3g7earh.gz
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\compressed\qo84d3f03f.gz
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\compressed\xgqztqi1el.gz
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\compressed\tjyc4fahle.gz
@@ -1033,4 +1074,3 @@ C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\FrontEleccM.dll
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\refint\FrontEleccM.dll
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\FrontEleccM.pdb
 C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\ref\FrontEleccM.dll
-C:\Users\Andrew\source\repos\FrontEleccM\obj\Debug\net8.0\FrontEleccM.sourcelink.json

@@ -1,18 +1,314 @@
 ﻿@page "/resultats"
+@using BackEleccionsM.Dto
+@using static System.Net.WebRequestMethods
+@inject HttpClient Http
 
-<PageTitle>Counter</PageTitle>
+<PageTitle>Resultats Eleccions</PageTitle>
 
-<h1>Counter</h1>
+<h1>Introducció Resultats Dia Eleccions</h1>
+<div>
+    <div class="recuadro">
+    @foreach(var muni in Municipis)
+    {
+        <ul>
+            <li @onclick="()=>SelectMunicipi(muni)" class="@(SelectedMuni == muni?"subrallado":"")">@muni.NomMunicipi</li>
+        </ul>
+    }
+  
+    @if(SelectedMuni!=null && !string.IsNullOrWhiteSpace(SelectedMuni.NomMunicipi))
+    {
+            <div class="recuadro">
+        <h5>Llista de Taules del Municipi: @SelectedMuni.NomMunicipi</h5>
+        @foreach (var taula in Taules)
+        {
+            <ul>
+                <li @onclick="()=>SelectTaula(taula)" class="@(SelectedTaula == taula?"subrallado":"")">@taula.NomTaula Cens:@taula.CensTaula</li>
+            </ul>
+        }
+            </div>
 
-<p role="status">Current count: @currentCount</p>
+    }
+    </div>
+    @if (SelectedTaula != null && !string.IsNullOrWhiteSpace(SelectedTaula.NomTaula)){
+    <h3 class="py-3">Resultats Taula @SelectedTaula.NomTaula</h3>
+        <button @onclick="()=>actualitzar()">ActualizarResultat</button>
+      <div class="d-sm-flex justify-content-evenly">
+        <div>  
+        <p>Vots nuls:</p>
+            <input type="number" @bind="ResultatTaula.VotsNul" placeholder="Vots nuls?" />
+        </div>
+        <div>
+        <p>Vots blancs:</p>
+            <input type="number" @bind="ResultatTaula.VotsBlanc" placeholder="Vots Blancs?" />
+        </div>
+        <div>
+        <p>Vots totals Escrotats:</p>
+            <!--<input type="number" bind="ResultatTaula.VotsTotals" placeholder="Vots Totals?" />-->
+                <span>@VotosTotales</span> <!-- Mostramos el total calculado -->
+        </div>
+        </div>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+        <div class="recuadro bg-info @(Mensaje==true?"show":"visually-hidden")">
+            <h3>Mensajes</h3>
+            @foreach (var mensaje in Mensajes)
+            {
+                <p>@mensaje</p>
+            }
+            <buton class="bg-danger" @onclick="()=>closeMensaje()">Cerrar</buton>
+        </div>
+        <div class="@(Correcto==true?"show p-3 green":"visually-hidden")"><h5>Actualizado Correctamente</h5></div>
+        <h5 class="py-4">VotsPerPartit: (max vots totals: @SelectedTaula.CensTaula)</h5>
+        @foreach(var vot in VotsList)
+        {
+
+            <ul>
+                <li @onclick="() => selectVot(vot)">
+                    @(myDictionary.ContainsKey(vot.PartitId) ? myDictionary[vot.PartitId] : "Partit Desconegut")
+                    : <input type="number" @bind="vot.NumeroVotsLlista" />
+                </li>
+            </ul>
+        }
+        //aquest buton no l hauria de necesitar 
+        //<button @onclick="() => deleteVot(SelectedVotPerPartit)">DeleteVot</button>
+    }
+
+</div>
+
 
 @code {
-    private int currentCount = 0;
+    //municipis
+    public MunicipiDto Muni { get; set; } = new MunicipiDto();
+    private MunicipiDto SelectedMuni { get; set; } = new MunicipiDto();
+    private List<MunicipiDto> Municipis { get; set; } = new List<MunicipiDto>();
 
-    private void IncrementCount()
+    //taulesElectorals
+    private TaulaElectoralDto Taula { get; set; } = new TaulaElectoralDto();
+    private TaulaElectoralDto SelectedTaula { get; set; } = new TaulaElectoralDto();
+    private List<TaulaElectoralDto> Taules { get; set; } = new List<TaulaElectoralDto>();
+
+    //ResultatTaulesElectorals
+    private ResultatsTaulaDto ResultatTaula { get; set; } = new ResultatsTaulaDto();
+    private ResultatsTaulaDto SelectedResultatTaula { get; set; } = new ResultatsTaulaDto();
+    private List<ResultatsTaulaDto> ResultatsT { get; set; } = new List<ResultatsTaulaDto>();
+
+    //votsPartit per Resultat
+    private VotsPerPartitDto VotPerPartit { get; set; } = new VotsPerPartitDto();
+    private VotsPerPartitDto SelectedVotPerPartit { get; set; } = new VotsPerPartitDto();
+    private List<VotsPerPartitDto> VotsList { get; set; } = new List<VotsPerPartitDto>();
+
+    //partitsP
+    private PartitPoliticDto Partit { get; set; } = new PartitPoliticDto();
+    private PartitPoliticDto SelectedPartit { get; set; } = new PartitPoliticDto();
+    private List<PartitPoliticDto> Partits { get; set; } = new List<PartitPoliticDto>();
+
+    //dictionary
+    private Dictionary<int, string> myDictionary = new Dictionary<int, string>();
+    private List<string> Mensajes { get; set; } = new List<string>();
+    private bool Mensaje = false;
+    private bool Correcto = false;
+    private int VotosTotales => ResultatTaula.VotsNul + ResultatTaula.VotsBlanc + VotsList.Sum(v => v.NumeroVotsLlista);
+
+    // Método para recalcular y forzar la actualización
+    private void ActualizarVotosTotales(ChangeEventArgs e)
     {
-        currentCount++;
+        // Este método asegura que la UI se actualice correctamente al cambiar valores
+        StateHasChanged();
+    }
+    void CorrectamenteActualizados()
+    {
+        Correcto = !Correcto;
+    }
+    void closeMensaje()
+    {
+        Mensajes.Clear();
+        Mensaje = !Mensaje;
+    }
+    void AgregarMensaje(string mensaje)
+    {
+        Mensaje = true;
+        Mensajes.Add(mensaje);
+        StateHasChanged(); // Para actualizar la interfaz
+    }
+    async Task GetMunis()
+    {
+        try
+        {
+            var munis = await Http.GetFromJsonAsync<List<MunicipiDto>>("api/Municipi");
+            if (munis != null)
+            {
+                foreach (var muni in munis)
+                {
+                    Console.WriteLine($"Municipi recibido: ID={muni.ID}, Nombre={muni.NomMunicipi}, Regidors={muni.NumeroRegidors}");
+                }
+                Municipis = munis;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al obtener municipios: {ex.Message}");
+        }
+    }
+    async Task deleteVot(VotsPerPartitDto vot)
+    {
+        Console.WriteLine(SelectedVotPerPartit.ID);
+
+        var response = await Http.DeleteAsync($"api/VotsPerPartit/{vot.ID}");
+        if (response.IsSuccessStatusCode)
+        {
+            Console.WriteLine("Vot eliminado correctamente");
+            await getVotsResultat(SelectedResultatTaula);
+        }
+        else { Console.WriteLine("Error al eliminar el Vot"); }
+
+        Console.WriteLine(SelectedVotPerPartit.ID);
+    }
+    void selectVot(VotsPerPartitDto vot)
+    {
+        Console.WriteLine($"VotSeleccionat: {SelectedVotPerPartit.ID}");
+        SelectedVotPerPartit = vot;
+        Console.WriteLine($"VotSeleccionat: {SelectedVotPerPartit.ID}");
+
+    }
+    async Task actualitzar()
+    {
+        // Sumar todos los votos: nulos, blancos y de partidos
+        int votstotals = ResultatTaula.VotsBlanc + ResultatTaula.VotsNul;
+        foreach (var v in VotsList)
+        {
+            votstotals += v.NumeroVotsLlista;
+        }
+
+        // Validar que los votos totales no superen el censo
+        if (votstotals > SelectedTaula.CensTaula)
+        {
+            AgregarMensaje("La suma de los votos totales no puede superar el censo de la mesa.");
+            return; // Detener la ejecución
+        }
+
+        // Validar que VotsTotals también sea coherente con el censo
+        if (ResultatTaula.VotsTotals > SelectedTaula.CensTaula)
+        {
+            AgregarMensaje("El valor de VotsTotals no puede superar el censo de la mesa.");
+            return; // Detener la ejecución
+        }
+
+        // Validar que la suma de los votos coincide con VotsTotals
+        if (votstotals != ResultatTaula.VotsTotals)
+        {
+            AgregarMensaje("La suma de los votos no coincide con VotsTotals.");
+            return; // Detener la ejecución
+        }
+
+        // Actualizar los datos si todas las validaciones pasan
+        try
+        {
+            await Http.PutAsJsonAsync($"api/ResultatsTaula/{ResultatTaula.ID}", ResultatTaula);
+            foreach (var vot in VotsList)
+            {
+                await Http.PutAsJsonAsync($"api/VotsPerPartit/{vot.ID}", vot);
+            }
+            CorrectamenteActualizados();
+        }
+        catch (Exception ex)
+        {
+            AgregarMensaje($"Error al actualizar resultados: {ex.Message}");
+        }
+    }
+
+    //crec que aquest func no es per res la millor xd
+    async Task createVotsList()
+    {
+
+        ResultatsT.Clear();
+        foreach(var muni in Municipis)
+        {
+            try
+            {
+                var partits = await Http.GetFromJsonAsync<List<PartitPoliticDto>>($"api/PartitPolitic/muniID/{muni.ID}");
+                var taules = await Http.GetFromJsonAsync<List<TaulaElectoralDto>>($"api/TaulaElectoral/muniID/{muni.ID}");
+                foreach(var taula in taules){
+                    var resultatT = await Http.GetFromJsonAsync<ResultatsTaulaDto>($"api/ResultatsTaula/taulaID/{taula.ID}");
+                    ResultatsT.Add(resultatT);
+                }
+                foreach (var result in ResultatsT)
+                {
+                    var boolvot = await getVotsResultat(result);
+                    if(boolvot){
+                        foreach (var partit in partits)
+                        {
+                            try
+                            {
+                                var vot = new VotsPerPartitDto();
+                                vot.ResultatsTaulaId = result.ID;
+                                vot.PartitId = partit.ID;
+                                var response = await Http.PostAsJsonAsync("api/VotsPerPartit", vot);
+                                Console.WriteLine("resultats vot: " + vot);
+                            }
+                            catch (Exception ex) { Console.WriteLine($"Error al crear vot: {ex.Message}"); }
+                        }
+                    }
+                }
+                ResultatsT.Clear();
+            }
+            catch (Exception e) { Console.WriteLine("error:" + e); }
+        }
+        ResultatsT.Clear();
+
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        await GetMunis();
+        var partits = await Http.GetFromJsonAsync<List<PartitPoliticDto>>($"api/PartitPolitic/");
+        foreach(var partit in partits)
+        {
+            myDictionary.Add(partit.ID, partit.NomPartit);
+        }
+        //lamar a la creacion de la lista de vots list(partits)
+        await createVotsList();
+    }
+    async Task getTaules(MunicipiDto Idmuni)
+    {
+        var taules = await Http.GetFromJsonAsync<List<TaulaElectoralDto>>($"api/TaulaElectoral/muniID/{Idmuni.ID}");
+        Taules = taules;
+    }
+    async Task getResultatsT(TaulaElectoralDto taula)
+    {
+        var resultatT = await Http.GetFromJsonAsync<ResultatsTaulaDto>($"api/ResultatsTaula/taulaID/{taula.ID}");
+        ResultatTaula = resultatT;
+        SelectedResultatTaula = resultatT;
+    }
+    async Task<bool> getVotsResultat(ResultatsTaulaDto result)
+    {
+        var vots = await Http.GetFromJsonAsync<List<VotsPerPartitDto>>($"api/VotsPerPartit/resultatTaulaID/{result.ID}");
+        VotsList = vots;
+        if (vots.Count() != 0)
+        {
+            return false;
+        }else{ return true; }
+    }
+    async Task<string> getNomPartit(VotsPerPartitDto vots)
+    {
+        var partit = await Http.GetFromJsonAsync<PartitPoliticDto>($"api/PartitPolitic/{vots.PartitId}");
+        return partit.NomPartit;
+    }
+    async Task SelectMunicipi(MunicipiDto municipi)
+    {
+        clearVars();
+        SelectedMuni = municipi;
+        Console.WriteLine("Selecting name muni: " + SelectedMuni.NomMunicipi);
+        await getTaules(SelectedMuni);
+    }
+    async Task SelectTaula(TaulaElectoralDto taula)
+    {
+        SelectedTaula = taula;
+        Console.WriteLine("Selecting name taula: " + SelectedTaula.NomTaula);
+        await getResultatsT(SelectedTaula);
+        await getVotsResultat(SelectedResultatTaula);
+        Correcto = false;
+    }
+    void clearVars()
+    {
+        SelectedTaula = new TaulaElectoralDto();
+        Taules.Clear();
     }
 }
