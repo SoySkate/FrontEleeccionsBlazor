@@ -1,6 +1,19 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using FrontEleccM.FrontServices
+@using Microsoft.AspNetCore.Components.Authorization
+@using FrontEleccM.Utils
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject RoleService RoleService
+@inject AuthStateService AuthStateService
+@inject MunicipiService MunicipiService
+
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">FrontEleccions</a>
+        <div><a class="navbar-brand" href="">@UserName</a>
+            <a href="/"><button class="btn btn-danger bi bi-power btn-sm" @onclick="Logout"></button></a>
+        </div>
+        
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -13,21 +26,32 @@
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="resultats">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Resultats
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="config">
-                <span class="bi bi-gear-fill" aria-hidden="true"></span> Configuració
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="eleccions">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Dia Eleccions
-            </NavLink>
-        </div>
+        @if (IsAuthenticated)
+        {
+            if (IsModerator)
+            {
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="resultats">
+                    <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Resultats
+                </NavLink>
+            </div>        <div class="nav-item px-3">
+                <NavLink class="nav-link" href="config">
+                    <span class="bi bi-gear-fill" aria-hidden="true"></span> Configuració
+                </NavLink>
+            </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="eleccions">
+                        <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span>DiaEleccs
+                    </NavLink>
+                </div>
+            }else{
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="eleccions">
+                    <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span>DiaEleccs
+                </NavLink>
+                </div>
+            }
+        }
     </nav>
 </div>
 
@@ -35,9 +59,66 @@
     private bool collapseNavMenu = true;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private bool IsModerator;
+    private bool IsUserRol;
+    private bool IsAuthenticated;
+    private string UserName = "Usuario";
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
     }
+
+    protected override async Task OnInitializedAsync()
+    {
+        AuthStateService.AuthStateChanged += RefreshState;
+        await LoadAuthState();
+    }
+
+    private async Task LoadAuthState()
+    {
+        try
+        {
+            IsModerator = await RoleService.IsInRoleAsync("Moderator");
+            IsUserRol = await RoleService.IsInRoleAsync("User");
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+            IsAuthenticated = user.Identity.IsAuthenticated;
+            UserName = "Usuario"; // Reiniciar el nombre de usuario
+            var token = await MunicipiService.GetTokenAsync();
+            if (!string.IsNullOrEmpty(token))
+            {
+                UserName = TokenUtils.DecodeJwt(token);
+                // Utiliza el token para establecer la autenticación
+                await MunicipiService.SetAuthorizationHeaderAsync(token); // (Paso 3)
+            }
+            else
+            {
+                // Manejar el caso en que no haya token
+                Console.WriteLine("No se encontró token en el sessionStorage");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error en OnInitializedAsync: {ex.Message}");
+            UserName = "Usuario";
+            IsAuthenticated = false;
+        }
+    }
+
+    private async void RefreshState()
+    {
+        await LoadAuthState();
+        StateHasChanged(); // Refresca el componente
+    }
+
+    public void Dispose()
+    {
+        AuthStateService.AuthStateChanged -= RefreshState; // Desuscribirse para evitar fugas de memoria
+    }
+    private async Task Logout()
+    {
+        await AuthStateService.Logout();
+    }
+
 }

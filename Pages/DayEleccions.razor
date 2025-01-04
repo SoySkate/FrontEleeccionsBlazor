@@ -1,7 +1,12 @@
 ﻿@page "/eleccions"
 @using BackEleccionsM.Dto
+@using FrontEleccM.FrontServices
+@using Microsoft.AspNetCore.Components.Authorization
 @inject HttpClient Http
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject MunicipiService MunicipiService
 
+@if (IsAuthenticated){
 <h3>Dia Eleccions:</h3>
 
 <div>
@@ -23,9 +28,15 @@
     }
 
 </div>
+}
+else
+{
+     <h3>Lo sentimos, no tienes acceso a esta página, no estas registrado.</h3>
+    <a href="/" class="btn btn-dark">Ir a loguearse o reistrarse</a>
 
+}
 @code {
-    private bool isMenuOpen = false;
+    private bool isMenuOpen = true;
 
     //municipis
     private MunicipiDto Municipi { get; set; }= new MunicipiDto();
@@ -52,6 +63,8 @@
     private PartitPoliticDto SelectedPartit { get; set; } = new PartitPoliticDto();
     private List<PartitPoliticDto> Partits { get; set; } = new List<PartitPoliticDto>();
 
+    private bool IsAuthenticated;
+
     // Método para alternar el menú
     private void ToggleMenu()
     {
@@ -63,6 +76,20 @@
     } 
     protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        IsAuthenticated = user.Identity.IsAuthenticated;
+        var token = await MunicipiService.GetTokenAsync();
+        if (!string.IsNullOrEmpty(token))
+        {
+            // Utiliza el token para establecer la autenticación
+            await MunicipiService.SetAuthorizationHeaderAsync(token); // (Paso 3)
+        }
+        else
+        {
+            // Manejar el caso en que no haya token
+            Console.WriteLine("No se encontró token en el sessionStorage");
+        }
         await GetMunis();
     }
 

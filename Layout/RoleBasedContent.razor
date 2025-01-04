@@ -1,0 +1,51 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@code {
+    [Parameter] public string Role { get; set; }
+    [Parameter] public RenderFragment? AuthorizedContent { get; set; }
+    [Parameter] public RenderFragment? UnauthorizedContent { get; set; }
+}
+
+@if (IsAuthenticated)
+{
+    if (UserRoles.Contains(Role))
+    {
+        @AuthorizedContent
+        <h1>contenido auth de un rol </h1>
+    }
+    else
+    {
+        @UnauthorizedContent
+        <h1>contenido auth sin rol </h1>
+
+
+    }
+}
+else
+{
+    @UnauthorizedContent
+    <h1>contenido NO auth</h1>
+
+}
+
+@code {
+    private bool IsAuthenticated;
+    private List<string> UserRoles = new List<string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        IsAuthenticated = user.Identity.IsAuthenticated;
+        if (IsAuthenticated)
+        {
+            UserRoles = user.Claims
+                .Where(c => c.Type == ClaimTypes.Role || c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")
+                .Select(c => c.Value)
+                .ToList();
+        }
+    }
+}

@@ -1,0 +1,82 @@
+﻿@page "/test"
+@using FrontEleccM.FrontServices
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject RoleService RoleService
+
+<h3>TestPage</h3>
+
+@if (IsAuthenticated)
+    {
+    if (IsModerator)
+    {
+        <h1>Estás autenticado como @UserName MODERATORROL</h1>
+        <p>Contenido PRO para usuarios premium.</p>
+    }
+    if (IsUserRol)
+    {
+        <h1>Estás autenticado como @UserName USERROL</h1>
+        <p>Contenido normal para usuarios.</p>
+    }
+}
+
+else
+    {
+        <h1>Bienvenido, no estas authenticated eeeh</h1>
+        <p>Contenido estándar para usuarios NO autenticados.</p>
+    }
+
+@code {
+    private AuthenticationState authState;
+    private bool IsAuthenticated;
+    private string UserName;
+    private IEnumerable<Claim> UserClaims;
+    private List<string> UserRoles = new List<string>();
+    private bool IsModerator;
+    private bool IsUserRol;
+
+    protected override async Task OnInitializedAsync()
+    {
+        IsModerator = await RoleService.IsInRoleAsync("Moderator");
+        IsUserRol = await RoleService.IsInRoleAsync("User");
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        IsAuthenticated = user.Identity.IsAuthenticated;
+    }
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+    //     var user = authState.User;
+
+    //     Verificar si el usuario está autenticado
+    //     IsAuthenticated = user.Identity.IsAuthenticated;
+
+    //     if (IsAuthenticated)
+    //     {
+    //         Obtener el nombre de usuario
+    //         UserName = user.Identity.Name;
+
+    //         Obtener los claims del usuario
+    //         UserClaims = user.Claims;
+
+    //         Extraer los roles del usuario
+    //         UserRoles = UserClaims
+    //             .Where(c => c.Type == ClaimTypes.Role || c.Type == "http:schemas.microsoft.com/ws/2008/06/identity/claims/role")
+    //             .Select(c => c.Value)
+    //             .ToList();
+
+    //         Mostrar roles en consola para depuración
+    //         Console.WriteLine("Roles del usuario:");
+    //         foreach (var role in UserRoles)
+    //         {
+    //             Console.WriteLine($"Rol: {role}");
+    //         }
+    //     }
+    //     else
+    //     {
+    //         Console.WriteLine("El usuario no está autenticado.");
+    //     }
+    // }
+
+}

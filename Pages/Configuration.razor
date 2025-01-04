@@ -1,8 +1,18 @@
 ﻿@page "/config"
 @using BackEleccionsM.Dto
-
+@using FrontEleccM.FrontServices
+@using Microsoft.AspNetCore.Components.Authorization
+@inject MunicipiService MunicipiService
 @inject HttpClient Http
+@inject IJSRuntime JSRuntime
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject RoleService RoleService
+@inject NavigationManager Navigation
+
 <PageTitle>Configuració Eleccions</PageTitle>
+
+@if (IsAuthenticated){
+    if (IsModerator){
 <div class="p-sm-2">
 	<!--update-->
         <div class="sticky-top">
@@ -55,7 +65,21 @@
             <CardComponent Municipi="SelectedMuni" Municipis="Municipis" OnMunicipiSelected="@HandleMunicipiSelected" /> <!--OnMunicipiSelected="HandleMunicipiSelected"-->
 
         </div>
-</div>
+        </div>
+    }
+    else
+    {
+        <h3>Lo sentimos, no tienes acceso a esta página, no eres un usuario administrador ;/</h3>
+    }
+    }
+    else
+    {
+        <div class="justify-content-center">
+    <h3>Lo sentimos, no tienes acceso a esta página, no estas registrado.</h3>
+    <a href="/" class="btn btn-dark">Ir a loguearse o reistrarse</a>
+    </div>
+
+    }
 
 
 
@@ -65,7 +89,9 @@
     private List<MunicipiDto> Municipis { get; set; } = new List<MunicipiDto>();
     private double MinimPercent { get; set; } = 0;
     public Dictionary<int, double> DicMinimPercent { get; set; } = new Dictionary<int, double>();
-
+    private bool IsModerator;
+    private bool IsUserRol;
+    private bool IsAuthenticated;
 
     void HandleMunicipiSelected(MunicipiDto municipi)
     {
@@ -76,6 +102,33 @@
     private bool isMuniVisible { get; set; } = true;
     private bool isMuniUpdateVisible { get; set; } = true;
 
+    protected override async Task OnInitializedAsync()
+    {
+        IsModerator = await RoleService.IsInRoleAsync("Moderator");
+        IsUserRol = await RoleService.IsInRoleAsync("User");
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        IsAuthenticated = user.Identity.IsAuthenticated;
+
+        var token = await MunicipiService.GetTokenAsync();
+        if (!string.IsNullOrEmpty(token))
+        {
+            // Utiliza el token para establecer la autenticación
+            await MunicipiService.SetAuthorizationHeaderAsync(token); // (Paso 3)
+        }
+        else
+        {
+            // Manejar el caso en que no haya token
+            Console.WriteLine("No se encontró token en el sessionStorage");
+        }
+        await GetMunis();
+        // await MunicipiService.SetAuthorizationHeaderAsync();
+        // await GetMunis();
+        // foreach (var min in Municipis)
+        // {
+        //     DicMinimPercent.Add(min.ID, MinimPercent);
+        // }
+    }
     async Task createMunicipi(MunicipiDto Muni)
     {
         // var muni = new { nomMunicipi = Muni.NomMunicipi, numeroRegidors = Muni.NumeroRegidors };
@@ -106,8 +159,6 @@
     }
     async Task updateMuni(MunicipiDto Muni)
     {
-
-
         var response = await Http.PutAsJsonAsync($"api/Municipi/{Muni.ID}", Muni);
 
         if (response.IsSuccessStatusCode)
@@ -139,15 +190,6 @@
         Muni.NomMunicipi = string.Empty;
         Muni.NumeroRegidors = 0;
         Muni.PercentatgeMinimEstablert = 0;
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        await GetMunis();
-        foreach(var min in Municipis)
-        {
-            DicMinimPercent.Add(min.ID, MinimPercent);
-        }
     }
 
     void visibleMuniC()
